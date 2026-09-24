@@ -218,7 +218,7 @@ export const TOUR_DAYS: DayItinerary[] = [
     ],
     meals: "Завтрак в отеле (шведский стол)",
     hotel: "Выезд из отеля (завершение программы)",
-    image: "/src/assets/images/kansai-international.jpg"
+    image: "./images/kansai-international.jpg"
   }
 ];
 
