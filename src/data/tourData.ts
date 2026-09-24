@@ -218,7 +218,7 @@ export const TOUR_DAYS: DayItinerary[] = [
     ],
     meals: "Завтрак в отеле (шведский стол)",
     hotel: "Выезд из отеля (завершение программы)",
-    image: tokyoNightImg
+    image: "/src/assets/images/kansai-international.jpg"
   }
 ];
 
@@ -300,7 +300,7 @@ export const ROUTE_STOPS = [
   },
   {
     id: "disney",
-    name: "Tokyo Disneyland",
+    name: "Диснейленд",
     kanji: "夢の国",
     days: "День 3",
     description: "Всемирно известный тематический парк: сказка, парады и культовые аттракционы мирового уровня.",
