@@ -1,0 +1,8 @@
+{
+  "name": "Япония: между традицией и будущим | Pacific Partners Tokyo",
+  "description": "Премиальный авторский тур по Японии на 7 дней: Токио, Диснейленд, скоростной Синкансэн, Киото, древняя Нара и Осака. Лицензированный туроператор Pacific Partners Tokyo Co., Ltd.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
