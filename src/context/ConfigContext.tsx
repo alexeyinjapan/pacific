@@ -11,7 +11,7 @@ export const DEFAULT_CONFIG = {
   telegram_link: "https://t.me/olga_japan",
 
   // 2. Лиды
-  telegram_bot_token: "8860378651:AAGxu73XAe_I-ePP070E3DuWgnu_h2dEytI",
+  telegram_bot_token: "",
   telegram_chat_id: "5435183297",
   web3forms_key: "6583fb27-f160-4a7d-bc88-f886547bbe9c",
 
