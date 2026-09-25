@@ -10,7 +10,7 @@ export const DEFAULT_CONFIG = {
   whatsapp_link: "https://api.whatsapp.com/send/?phone=819099661555",
   telegram_link: "https://t.me/olga_japan",
 
-  // 2. Лиды
+  // 2. Лиды (секретный токен берется из Google Таблицы)
   telegram_bot_token: "",
   telegram_chat_id: "5435183297",
   web3forms_key: "6583fb27-f160-4a7d-bc88-f886547bbe9c",
@@ -100,6 +100,12 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
               }
             }
           });
+
+          // АВТОМАТИЧЕСКИ МЕНЯЕМ ЗАГОЛОВОК ВКЛАДКИ БРАУЗЕРА ПОД АГЕНТА:
+          const activeCompany = loaded.company_name || loaded.header_logo_text || DEFAULT_CONFIG.company_name;
+          if (typeof document !== 'undefined') {
+            document.title = `Япония: между традицией и будущим | ${activeCompany}`;
+          }
 
           setConfig(prev => ({ ...prev, ...loaded }));
         })
