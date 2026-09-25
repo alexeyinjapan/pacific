@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight } from 'lucide-react';
+import { useConfig } from '../context/ConfigContext';
 
 interface NavbarProps {
   onOpenCalculator: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenCalculator }) => {
+  const config = useConfig();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -34,17 +36,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCalculator }) => {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 lg:px-12">
-        {/* Zone 1: Single text element wordmark */}
+        {/* Логотип: подтягивается из Google Таблицы */}
         <a
           href="#"
           className={`font-display text-xl lg:text-2xl font-bold tracking-tight transition-colors ${
             scrolled ? 'text-[#1C1C1E] hover:text-[#B82626]' : 'text-white hover:text-amber-200'
           }`}
         >
-          Pacific Partners Tokyo
+          {config.header_logo_text}
         </a>
 
-        {/* Zone 2: 4-6 clean text navigation links */}
+        {/* Навигационные ссылки */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
           {navLinks.map((link) => (
             <a
@@ -59,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCalculator }) => {
           ))}
         </nav>
 
-        {/* Zone 3: 1-2 primary actions */}
+        {/* Кнопка расчета */}
         <div className="flex items-center gap-3">
           <button
             onClick={onOpenCalculator}
@@ -86,7 +88,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCalculator }) => {
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Мобильное меню */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-stone-200 bg-[#F9F8F6] px-6 py-6 shadow-xl text-stone-900 animate-in fade-in slide-in-from-top-2">
           <nav className="flex flex-col gap-4">

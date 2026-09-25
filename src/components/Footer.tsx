@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { COMPANY_INFO } from '../data/tourData';
-import { Phone, Mail, MapPin, ShieldCheck, ArrowUpRight, MessageSquare, Send } from 'lucide-react';
+import { useConfig } from '../context/ConfigContext';
+import { Phone, Mail, MapPin, ShieldCheck, MessageSquare, Send } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const config = useConfig();
   const [privacyOpen, setPrivacyOpen] = useState(false);
 
   return (
@@ -13,11 +14,8 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-5 space-y-4">
             <div className="flex items-center gap-2">
               <span className="font-display text-2xl font-bold text-white tracking-tight">
-                {COMPANY_INFO.name}
+                {config.company_name}
               </span>
-            </div>
-            <div className="text-xs text-[#E0C179] font-medium font-kanji">
-              {COMPANY_INFO.japaneseName}
             </div>
 
             <p className="text-xs sm:text-sm text-stone-400 font-light leading-relaxed max-w-md">
@@ -76,14 +74,15 @@ export const Footer: React.FC = () => {
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm">
+              {/* Телефон */}
               <div className="flex items-start gap-3">
                 <Phone className="h-4 w-4 text-[#E0C179] shrink-0 mt-0.5" />
                 <div>
                   <a
-                    href={`tel:${COMPANY_INFO.phone.replace(/[^0-9+]/g, '')}`}
+                    href={`tel:${config.contact_phone.replace(/[^0-9+]/g, '')}`}
                     className="hover:text-white transition-colors font-mono"
                   >
-                    {COMPANY_INFO.phone}
+                    {config.contact_phone}
                   </a>
                   <span className="block text-[11px] text-stone-500">
                     Пн–Вс: 09:00 – 21:00 (время Токио / JST)
@@ -91,20 +90,22 @@ export const Footer: React.FC = () => {
                 </div>
               </div>
 
+              {/* Email */}
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-[#E0C179] shrink-0" />
                 <a
-                  href={`mailto:${COMPANY_INFO.email}`}
+                  href={`mailto:${config.contact_email}`}
                   className="hover:text-white transition-colors"
                 >
-                  {COMPANY_INFO.email}
+                  {config.contact_email}
                 </a>
               </div>
 
+              {/* Адрес */}
               <div className="flex items-start gap-3">
                 <MapPin className="h-4 w-4 text-[#E0C179] shrink-0 mt-0.5" />
                 <span className="text-stone-400 text-xs leading-relaxed font-light">
-                  {COMPANY_INFO.officeAddress}
+                  {config.contact_address}
                 </span>
               </div>
             </div>
@@ -112,7 +113,7 @@ export const Footer: React.FC = () => {
             {/* Messengers quick buttons */}
             <div className="pt-2 flex items-center gap-2">
               <a
-                href={`https://api.whatsapp.com/send/?phone=819099661555`}
+                href={config.whatsapp_link}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-white/5 border border-white/10 hover:border-emerald-500 text-xs text-stone-300 hover:text-emerald-400 transition-colors"
@@ -122,7 +123,7 @@ export const Footer: React.FC = () => {
               </a>
 
               <a
-                href="https://t.me/olga_japan"
+                href={config.telegram_link}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-sm bg-white/5 border border-white/10 hover:border-sky-500 text-xs text-stone-300 hover:text-sky-400 transition-colors"
@@ -134,10 +135,10 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
-        {/* Quiet Sub-footer */}
+        {/* Sub-footer с автоматическим годом и единой переменной компании */}
         <div className="pt-8 border-t border-stone-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
           <div>
-            © {new Date().getFullYear()} {COMPANY_INFO.name}. Все права защищены.
+            © {new Date().getFullYear()} {config.company_name}. Все права защищены.
           </div>
 
           <div className="flex items-center gap-6">
@@ -161,10 +162,10 @@ export const Footer: React.FC = () => {
               Политика конфиденциальности и защита данных
             </h4>
             <p>
-              Компания Pacific Partners Tokyo Co., Ltd. соблюдает Закон Японии о защите персональной информации (APPI) и международные регламенты обработки данных.
+              Компания {config.company_name} соблюдает Закон Японии о защите персональной информации (APPI) и международные регламенты обработки данных.
             </p>
             <p>
-              Все контактные данные, передаваемые через сайт, используются исключительно для расчёта программы тура, оформления официального договора и бронирования услуг (отелей, билетов на Синкансэн, визовой поддержки). Мы гарантируем неразглашение и конфиденциальность.
+              Все контактные данные, передаваемые через сайт, используются исключительно для расчёта программы тура, оформления официального договора и бронирования услуг. Мы гарантируем неразглашение и конфиденциальность.
             </p>
             <div className="pt-2 text-right">
               <button

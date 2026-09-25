@@ -1,3 +1,4 @@
+import { useConfig } from '../context/ConfigContext';
 import React from 'react';
 import { ArrowRight, Calendar, Compass, ShieldCheck } from 'lucide-react';
 import heroImg from '../assets/images/hero_japan_tradition_future_1790223774740.jpg';
@@ -7,6 +8,9 @@ interface HeroProps {
 }
 
 export const Hero: React.FC<HeroProps> = ({ onOpenCalculator }) => {
+
+    const config = useConfig(); 
+
   return (
     <section className="relative min-h-[92vh] lg:min-h-screen flex items-center justify-center overflow-hidden bg-[#121214] text-white pt-24 pb-16">
       {/* Background Image with Measured Scrim for WCAG AA Contrast */}
@@ -35,7 +39,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCalculator }) => {
         {/* Subtle Organization Pre-title */}
         <div className="mb-4 flex items-center gap-2 text-xs lg:text-sm tracking-widest uppercase text-[#E0C179] font-medium">
           <span className="inline-block h-px w-6 lg:w-10 bg-[#C5A059]" />
-          <span>Pacific Partners Tokyo Co., Ltd. • Авторский маршрут</span>
+          <span>{config.company_name} • Авторский маршрут</span>
           <span className="inline-block h-px w-6 lg:w-10 bg-[#C5A059]" />
         </div>
 
