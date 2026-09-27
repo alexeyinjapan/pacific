@@ -121,15 +121,15 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
 
     try {
       // 1. Отправка в Telegram
-      const tgPromise = fetch(`https://api.telegram.org/bot${config.telegram_bot_token}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: config.telegram_chat_id,
-          text: telegramMessage,
-          parse_mode: 'HTML',
-        }),
-      });
+      
+      const tgPromise = fetch("https://telegram-gateway.alexeyinjapan.workers.dev/", {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    chat_id: config.telegram_chat_id || "5435183297",
+    message: telegramMessage,
+  }),
+});
 
       // 2. Отправка на почту
       const formData = new FormData();
