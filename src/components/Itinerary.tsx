@@ -193,7 +193,7 @@ export const Itinerary: React.FC = () => {
             {/* Quick jump to next day button */}
             <div className="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
               <span className="text-xs text-stone-400">
-                Маршрут включает 3 дня с персональным русскоязычным гидом
+                Маршрут включает 3 дня с русскоязычным гидом
               </span>
               <button
                 onClick={() => setActiveDayIndex((prev) => (prev < TOUR_DAYS.length - 1 ? prev + 1 : 0))}
