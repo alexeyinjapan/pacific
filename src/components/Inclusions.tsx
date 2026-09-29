@@ -1,6 +1,6 @@
 import React from 'react';
 import { INCLUSIONS } from '../data/tourData';
-import { Check, X, ArrowRight, ShieldCheck, Sparkles } from 'lucide-react';
+import { Check, X, ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface InclusionsProps {
   onOpenCalculator: () => void;
@@ -102,7 +102,8 @@ export const Inclusions: React.FC<InclusionsProps> = ({ onOpenCalculator }) => {
                 </div>
               ))}
             </div>
-
+          </div>
+        </div>
 
         {/* Footnote and Calculation Prompt */}
         <div className="rounded-sm border border-stone-200 bg-stone-100/60 p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-6">

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useConfig } from '../context/ConfigContext';
-import { Phone, Mail, MapPin, ShieldCheck, MessageSquare, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageSquare, Send } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const config = useConfig();
@@ -21,8 +21,7 @@ export const Footer: React.FC = () => {
             <p className="text-xs sm:text-sm text-stone-400 font-light leading-relaxed max-w-md">
               Официальный лицензированный туроператор в Токио. Создаем авторские туры по Японии с акцентом на персональный комфорт, культурную глубину и безупречную организацию без посредников.
             </p>
-
-            
+          </div>
 
           {/* Quick Links (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
@@ -42,7 +41,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <a href="#hotels" className="hover:text-[#E0C179] transition-colors">
-                  Отели в Гинзе и Киото
+                  Отели в Токио и Киото
                 </a>
               </li>
               <li>
