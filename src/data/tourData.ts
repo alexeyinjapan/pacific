@@ -269,7 +269,7 @@ export const TOUR_HOTELS: HotelInfo[] = [
 
 export const INCLUSIONS = {
   included: [
-    { title: "Все 6 ночей в отелях 3*–4* в центре Токио и Киото", desc: "3 ночи в Sotetsu Fresa Inn Ginza Nanachome + 3 ночи в Sotetsu Fresa Inn Kyoto Hachijo Guchi (или равноценные)" },
+    { title: "Все 6 ночей в отелях 3* – 4* в центре Токио и Киото", desc: "3 ночи в Sotetsu Fresa Inn Ginza Nanachome + 3 ночи в Sotetsu Fresa Inn Kyoto Hachijo Guchi (или равноценные)" },
     { title: "Ежедневные завтраки в отелях", desc: "Шведский стол с японскими и европейскими горячими блюдами" },
     { title: "Скоростной поезд-пуля Синкансэн (Токио → Киото)", desc: "Резервированные комфортные места в вагоне, скорость до 285 км/ч" },
     { title: "Билет на скоростной экспресс JR Haruka в аэропорт KIX", desc: "Прямой поезд от вокзала Киото прямо в терминал аэропорта Осаки" },

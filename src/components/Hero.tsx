@@ -58,7 +58,7 @@ export const Hero: React.FC<HeroProps> = ({ onOpenCalculator }) => {
 
         {/* Zero-Pill Metadata Discipline: Clean unboxed metadata with typographic separators */}
         <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-xs sm:text-sm text-stone-300 mb-10 max-w-2xl">
-          <span className="font-medium text-amber-100">Отели 3*–4* в центре</span>
+          <span className="font-medium text-amber-100">Отели 3* – 4* в центре</span>
           <span aria-hidden="true" className="text-stone-500">·</span>
           <span className="font-medium text-amber-100">Русскоязычный гид</span>
           <span aria-hidden="true" className="text-stone-500">·</span>
