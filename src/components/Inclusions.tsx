@@ -103,18 +103,6 @@ export const Inclusions: React.FC<InclusionsProps> = ({ onOpenCalculator }) => {
               ))}
             </div>
 
-            {/* Assistance callout */}
-            <div className="p-4 rounded-sm bg-amber-50/70 border border-amber-200/80 text-xs text-stone-700 space-y-1">
-              <div className="font-semibold text-[#8B1515] flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5" />
-                <span>Помощь с авиабилетами:</span>
-              </div>
-              <p className="font-light leading-relaxed">
-                Наш авиаотдел поможет бесплатно подобрать оптимальные прямые или стыковочные рейсы (через Шанхай, Пекин, Доху или Дубай) под ваши даты.
-              </p>
-            </div>
-          </div>
-        </div>
 
         {/* Footnote and Calculation Prompt */}
         <div className="rounded-sm border border-stone-200 bg-stone-100/60 p-6 lg:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
