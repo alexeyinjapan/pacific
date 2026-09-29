@@ -19,7 +19,7 @@ export const Hotels: React.FC = () => {
             Где вы будете жить: центры городов и комфорт без компромиссов
           </h2>
           <p className="mt-3 text-stone-300 text-base font-light">
-            Мы не селим туристов в отдаленных спальных районах. Вы живете в фешенебельной Гинзе (Токио) и у центрального вокзала Киото с включенными горячими завтраками.
+            Мы не селим туристов в отдаленных спальных районах. Вы живете в фешенебельной Гинзе (Токио) и у центрального вокзала Киото с включенными горячими завтраками. Если эти отели переполнены и нет возможности их забронировать, мы предложим альтернативные равноценные отели. 
           </p>
         </div>
 
@@ -80,7 +80,7 @@ export const Hotels: React.FC = () => {
                 <Coffee className="h-5 w-5 text-[#E0C179] shrink-0 mt-0.5" />
                 <div>
                   <div className="text-xs uppercase tracking-wider text-amber-200 font-semibold mb-1">
-                    Сытный завтрак «Шведский стол» включен
+                    Завтрак «Шведский стол» включен
                   </div>
                   <p className="text-xs sm:text-sm text-stone-300 font-light leading-relaxed">
                     {selectedHotel.breakfast}
@@ -138,7 +138,7 @@ export const Hotels: React.FC = () => {
             <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-stone-400">
               <div className="flex items-center gap-2">
                 <Bed className="h-4 w-4 text-[#E0C179]" />
-                <span>Опции размещения: Twin (раздельные кровати) / Double (одна большая кровать)</span>
+                <span>Опции размещения: Twin (раздельные кровати) / Double (одна большая кровать) / Single (одноместный номер)</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="h-4 w-4 text-[#E0C179]" />
