@@ -80,11 +80,11 @@ export const TOUR_DAYS: DayItinerary[] = [
       "Панорамный сад на крыше ультрасовременного молла Ginza SIX"
     ],
     schedule: [
-      { time: "09:00", activity: "Встреча в лобби отеля с русскоязычным лицензированным гидом" },
-      { time: "09:30 - 11:30", activity: "Прогулка по парку Йойоги и посещение святилища Мэйдзи Дзингу" },
-      { time: "12:00 - 13:30", activity: "Сибуя: переход Скрамбл, Хатико, обед в традиционном ресторане тонкацу" },
-      { time: "14:15 - 16:30", activity: "Асакуса: ворота Каминаримон, храм Сэнсодзи, сувенирные ряды Накамисэ" },
-      { time: "17:00 - 18:30", activity: "Площадь Императорского дворца Кокё и крыша Ginza SIX с видом на город" }
+      { time: "10:00", activity: "Встреча в лобби отеля с русскоязычным гидом" },
+      { time: "10:30 - 11:30", activity: "Прогулка по парку Йойоги и посещение святилища Мэйдзи Дзингу" },
+      { time: "12:00 - 13:30", activity: "Сибуя: переход Скрамбл, Хатико, обед в традиционном ресторане (с оплатой на месте)" },
+      { time: "14:15 - 16:00", activity: "Асакуса: ворота Каминаримон, храм Сэнсодзи, сувенирные ряды Накамисэ" },
+      { time: "17:00 - 18:00", activity: "Площадь Императорского дворца Кокё и смотровая площадка Ginza SIX с видом на город" }
     ],
     meals: "Завтрак в отеле (шведский стол)",
     hotel: "Sotetsu Fresa Inn Ginza Nanachome Tokyo (или равноценный)",
@@ -113,7 +113,7 @@ export const TOUR_DAYS: DayItinerary[] = [
       { time: "21:00", activity: "Возвращение в отель на скоростной линии JR Keiyo / Ginza" }
     ],
     meals: "Завтрак в отеле (шведский стол)",
-    hotel: "Sotetsu Fresa Inn Ginza Nanachome (Токио)",
+    hotel: "Sotetsu Fresa Inn Ginza Nanachome Tokyo (или равноценный)",
     image: tokyoNightImg
   },
   {
@@ -140,7 +140,7 @@ export const TOUR_DAYS: DayItinerary[] = [
       { time: "18:30", activity: "Заселение в отель Sotetsu Fresa Inn Kyoto Hachijo Guchi, вечерний отдых" }
     ],
     meals: "Завтрак в отеле + японский ланч экибэн в синкансэне",
-    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (Киото)",
+    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi Kyoto (или равноценный)",
     image: naraDeerImg
   },
   {
@@ -167,7 +167,7 @@ export const TOUR_DAYS: DayItinerary[] = [
       { time: "17:00 - 19:00", activity: "Храм Киёмидзудэра, спуск по улочкам Саннэндзака и вечерний Гион" }
     ],
     meals: "Завтрак в отеле (шведский стол)",
-    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (Киото) (или равноценный)",
+    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi Kyoto (или равноценный)",
     image: inariImg
   },
   {
@@ -193,7 +193,7 @@ export const TOUR_DAYS: DayItinerary[] = [
       { time: "18:00+", activity: "Ужин в ресторане у реки Камогава в историческом квартале Понтотё" }
     ],
     meals: "Завтрак в отеле (шведский стол)",
-    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (Киото) (или равноценный)",
+    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi Kyoto (или равноценный)",
     image: kyotoDay6Img
   },
   {
