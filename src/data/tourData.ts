@@ -167,7 +167,7 @@ export const TOUR_DAYS: DayItinerary[] = [
       { time: "17:00 - 19:00", activity: "Храм Киёмидзудэра, спуск по улочкам Саннэндзака и вечерний Гион" }
     ],
     meals: "Завтрак в отеле (шведский стол)",
-    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (Киото)",
+    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (Киото) (или равноценный)",
     image: inariImg
   },
   {
@@ -193,7 +193,7 @@ export const TOUR_DAYS: DayItinerary[] = [
       { time: "18:00+", activity: "Ужин в ресторане у реки Камогава в историческом квартале Понтотё" }
     ],
     meals: "Завтрак в отеле (шведский стол)",
-    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (Киото)",
+    hotel: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (Киото) (или равноценный)",
     image: kyotoDay6Img
   },
   {
@@ -225,7 +225,7 @@ export const TOUR_DAYS: DayItinerary[] = [
 export const TOUR_HOTELS: HotelInfo[] = [
   {
     id: "fresa-ginza",
-    name: "Sotetsu Fresa Inn Ginza Nanachome",
+    name: "Sotetsu Fresa Inn Ginza Nanachome (или равноценный)",
     city: "Токио",
     nights: 3,
     stars: "3★–4★",
@@ -246,7 +246,7 @@ export const TOUR_HOTELS: HotelInfo[] = [
   },
   {
     id: "fresa-kyoto",
-    name: "Sotetsu Fresa Inn Kyoto Hachijo Guchi",
+    name: "Sotetsu Fresa Inn Kyoto Hachijo Guchi (или равноценный)",
     city: "Киото",
     nights: 3,
     stars: "3★–4★",
@@ -269,7 +269,7 @@ export const TOUR_HOTELS: HotelInfo[] = [
 
 export const INCLUSIONS = {
   included: [
-    { title: "Все 6 ночей в отелях 3*–4* в центрах Токио и Киото", desc: "3 ночи в Sotetsu Fresa Inn Ginza Nanachome + 3 ночи в Sotetsu Fresa Inn Kyoto Hachijo Guchi" },
+    { title: "Все 6 ночей в отелях 3*–4* в центрах Токио и Киото", desc: "3 ночи в Sotetsu Fresa Inn Ginza Nanachome + 3 ночи в Sotetsu Fresa Inn Kyoto Hachijo Guchi (или равноценные)" },
     { title: "Ежедневные сытные завтраки в отелях", desc: "Шведский стол с японскими и европейскими горячими блюдами" },
     { title: "Скоростной поезд-пуля Синкансэн (Токио → Киото)", desc: "Резервированные комфортные места в вагоне, скорость до 285 км/ч" },
     { title: "Билет на скоростной экспресс JR Haruka в аэропорт KIX", desc: "Прямой поезд от вокзала Киото прямо в терминал аэропорта Осаки" },
