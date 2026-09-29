@@ -98,7 +98,7 @@ export const Hotels: React.FC = () => {
                 <span>·</span>
                 <span>{selectedHotel.nights} ночи пребывания</span>
                 <span>·</span>
-                <span className="text-[#E0C179]">Питание включено</span>
+                <span className="text-[#E0C179]">Завтрак включен</span>
               </div>
 
               <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white mb-3">
