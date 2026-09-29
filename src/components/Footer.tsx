@@ -22,11 +22,7 @@ export const Footer: React.FC = () => {
               Официальный лицензированный туроператор в Токио. Создаем авторские туры по Японии с акцентом на персональный комфорт, культурную глубину и безупречную организацию без посредников.
             </p>
 
-            <div className="flex items-center gap-2 text-xs text-stone-400 pt-2">
-              <ShieldCheck className="h-4 w-4 text-[#C5A059] shrink-0" />
-              <span>Лицензия туристического агентства правительства Токио No. 3-8192</span>
-            </div>
-          </div>
+            
 
           {/* Quick Links (3 cols) */}
           <div className="lg:col-span-3 space-y-3">
