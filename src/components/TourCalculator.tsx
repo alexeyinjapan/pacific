@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Send, CheckCircle2, MessageSquare, Calendar, Users, Hotel, Sparkles, ShieldCheck } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Send, CheckCircle2, MessageSquare, Calendar, Users, Hotel, Sparkles, ShieldCheck, Plus, Minus } from 'lucide-react';
 import { useConfig } from '../context/ConfigContext';
 
 interface TourCalculatorProps {
@@ -9,15 +9,49 @@ interface TourCalculatorProps {
 export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit }) => {
   const config = useConfig();
 
-  // Состояние калькулятора
+  // Состояние выбранных номеров (количество каждого типа)
+  const [rooms, setRooms] = useState<{ standard: number; superior: number; single: number }>({
+    standard: 1,
+    superior: 0,
+    single: 0,
+  });
+
   const [travelers, setTravelers] = useState<number>(2);
   const [season, setSeason] = useState<'spring' | 'summer' | 'autumn' | 'winter'>('autumn');
-  const [roomType, setRoomType] = useState<'standard' | 'superior' | 'single'>('standard');
   const [addons, setAddons] = useState<{ teaCeremony: boolean; universal: boolean; kimonoPhoto: boolean }>({
     teaCeremony: false,
     universal: false,
     kimonoPhoto: false,
   });
+
+  // Автоматический пересчет количества людей при изменении номеров
+  useEffect(() => {
+    // Правило: если выбран ТОЛЬКО Single (1 номер) -> ставим 1 чел.
+    if (rooms.single === 1 && rooms.standard === 0 && rooms.superior === 0) {
+      setTravelers(1);
+    } else {
+      // Иначе считаем стандартную вместимость: Standard (2 чел) + Superior (2 чел) + Single (1 чел)
+      const calculatedPeople = (rooms.standard * 2) + (rooms.superior * 2) + (rooms.single * 1);
+      if (calculatedPeople > 0) {
+        setTravelers(calculatedPeople);
+      }
+    }
+  }, [rooms]);
+
+  // Функция изменения количества номеров (+ и -)
+  const handleRoomCountChange = (type: 'standard' | 'superior' | 'single', delta: number) => {
+    setRooms(prev => {
+      const current = prev[type];
+      const updated = Math.max(0, current + delta);
+      const nextRooms = { ...prev, [type]: updated };
+
+      // Защита: нельзя оставить 0 номеров вообще
+      if (nextRooms.standard === 0 && nextRooms.superior === 0 && nextRooms.single === 0) {
+        return prev;
+      }
+      return nextRooms;
+    });
+  };
 
   // Состояние формы
   const [name, setName] = useState('');
@@ -28,7 +62,7 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // 1. ПРЯМАЯ МАТРИЦА ЦЕН ИЗ GOOGLE ТАБЛИЦЫ (БЕЗ КОЭФФИЦИЕНТОВ)
+  // Матрица цен из таблицы
   const pricingMatrix = {
     spring: {
       standard: config.price_spring_standard,
@@ -52,10 +86,7 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
     },
   };
 
-  // Точная цена за 1 человека в USD под выбранный сезон и номер
-  const exactTourPricePerPersonUSD = pricingMatrix[season][roomType];
-
-  // Динамические названия сезонов
+  // Названия сезонов
   const seasonsData = {
     spring: { title: config.season_spring_title, sub: config.season_spring_sub },
     summer: { title: config.season_summer_title, sub: config.season_summer_sub },
@@ -63,29 +94,36 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
     winter: { title: config.season_winter_title, sub: config.season_winter_sub },
   };
 
-  // Динамические названия номеров
-  const roomNames = {
-    standard: config.room_standard_name,
-    superior: config.room_superior_name,
-    single: config.room_single_name,
-  };
+  // Расчет стоимости всех номеров тура:
+  // Standard и Superior считаются за 2 человек в номере, Single — за 1 человека
+  const totalTourRoomsCostUSD =
+    (rooms.standard * 2 * pricingMatrix[season].standard) +
+    (rooms.superior * 2 * pricingMatrix[season].superior) +
+    (rooms.single * 1 * pricingMatrix[season].single);
 
-  // Расчет дополнительных услуг
+  // Расчет допов (на каждого путешественника)
   let addonsTotalUSD = 0;
-  if (addons.teaCeremony) addonsTotalUSD += config.addon_tea_price;
-  if (addons.universal) addonsTotalUSD += config.addon_universal_price;
+  if (addons.teaCeremony) addonsTotalUSD += config.addon_tea_price * travelers;
+  if (addons.universal) addonsTotalUSD += config.addon_universal_price * travelers;
   if (addons.kimonoPhoto) addonsTotalUSD += config.addon_kimono_price;
 
-  // Итоговая точная цена (Тур + Допы)
-  const estimatedPerPersonUSD = exactTourPricePerPersonUSD + addonsTotalUSD;
-  const estimatedTotalUSD = estimatedPerPersonUSD * travelers;
+  // Итоги
+  const estimatedTotalUSD = totalTourRoomsCostUSD + addonsTotalUSD;
+  const estimatedPerPersonUSD = Math.round(estimatedTotalUSD / (travelers || 1));
 
-  // Расчет в валютах агента
+  // Валюты агента
   const pricePerPersonPrimary = Math.round(estimatedPerPersonUSD * config.rate_to_primary).toLocaleString();
   const priceTotalPrimary = Math.round(estimatedTotalUSD * config.rate_to_primary).toLocaleString();
   const priceTotalSecondary = Math.round(estimatedTotalUSD * config.rate_to_secondary).toLocaleString();
 
-  // Отправка заявки
+  // Список выбранных номеров для отчета
+  const roomsSummaryList: string[] = [];
+  if (rooms.standard > 0) roomsSummaryList.push(`${rooms.standard}x ${config.room_standard_name}`);
+  if (rooms.superior > 0) roomsSummaryList.push(`${rooms.superior}x ${config.room_superior_name}`);
+  if (rooms.single > 0) roomsSummaryList.push(`${rooms.single}x ${config.room_single_name}`);
+  const roomsSummaryText = roomsSummaryList.join(', ');
+
+  // Отправка заявки через защищенный шлюз
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !contact.trim()) {
@@ -107,37 +145,37 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
 🇯🇵 <b>ПАРАМЕТРЫ ИЗ КАЛЬКУЛЯТОРА:</b>
 • <b>Человек:</b> ${travelers} чел.
 • <b>Сезон:</b> ${seasonsData[season].title} (${seasonsData[season].sub})
-• <b>Номер:</b> ${roomNames[roomType]}
-• <b>Чайная церемония:</b> ${addons.teaCeremony ? `✅ Да (+${config.currency_primary_symbol}${Math.round(config.addon_tea_price * config.rate_to_primary)})` : '❌ Нет'}
-• <b>Universal Studios:</b> ${addons.universal ? `✅ Да (+${config.currency_primary_symbol}${Math.round(config.addon_universal_price * config.rate_to_primary)})` : '❌ Нет'}
+• <b>Выбранные номера:</b> <b>${roomsSummaryText}</b>
+• <b>Чайная церемония:</b> ${addons.teaCeremony ? `✅ Да (+${config.currency_primary_symbol}${Math.round(config.addon_tea_price * config.rate_to_primary)}/чел)` : '❌ Нет'}
+• <b>Universal Studios:</b> ${addons.universal ? `✅ Да (+${config.currency_primary_symbol}${Math.round(config.addon_universal_price * config.rate_to_primary)}/чел)` : '❌ Нет'}
 • <b>Фотосессия в кимоно:</b> ${addons.kimonoPhoto ? `✅ Да (+${config.currency_primary_symbol}${Math.round(config.addon_kimono_price * config.rate_to_primary)})` : '❌ Нет'}
 
 💰 <b>ФИНАНСОВЫЙ РАСЧЕТ:</b>
-• <b>На 1 человека:</b> ${config.currency_primary_symbol}${pricePerPersonPrimary}
+• <b>В среднем на 1 чел:</b> ${config.currency_primary_symbol}${pricePerPersonPrimary}
 • <b>ИТОГО ЗА ВСЕХ:</b> <b>${config.currency_primary_symbol}${priceTotalPrimary}</b> (≈ ${config.currency_secondary_symbol}${priceTotalSecondary})
 ━━━━━━━━━━━━━━━━━━
 ⏰ <i>${new Date().toLocaleString('ru-RU')}</i>
     `.trim();
 
     try {
-      // 1. Отправка в Telegram
-      
-      const tgPromise = fetch("https://telegram-gateway.alexeyinjapan.workers.dev/", {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    chat_id: config.telegram_chat_id || "5435183297",
-    message: telegramMessage,
-  }),
-});
+      // 1. Отправка в защищенный шлюз Cloudflare Worker
+      const tgPromise = fetch("https://telegram-gateway.alexeyinjapan.workers.dev", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: config.telegram_chat_id || "5435183297",
+          message: telegramMessage,
+        }),
+      });
 
-      // 2. Отправка на почту
+      // 2. Дублирование на почту через Web3Forms
       const formData = new FormData();
       formData.append("access_key", config.web3forms_key);
       formData.append("subject", `🔥 Заявка: ${name} (${travelers} чел. / ${config.currency_primary_symbol}${priceTotalPrimary})`);
       formData.append("from_name", config.company_name);
       formData.append("Client_Name", name);
       formData.append("Contact_Info", contact);
+      formData.append("Rooms", roomsSummaryText);
       formData.append("Total_Price", `${config.currency_primary_symbol}${priceTotalPrimary}`);
       formData.append("message", telegramMessage.replace(/<[^>]*>?/gm, ''));
 
@@ -189,11 +227,130 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
                 <span>Параметры поездки:</span>
               </div>
 
-              {/* 1. Количество человек */}
+              {/* 1. Количество номеров (множественный выбор с + и -) */}
               <div className="mb-6">
                 <label className="text-xs uppercase tracking-wider text-stone-400 block mb-2 font-medium flex items-center gap-1.5">
-                  <Users className="h-3.5 w-3.5 text-[#E0C179]" />
-                  <span>Количество путешественников:</span>
+                  <Hotel className="h-3.5 w-3.5 text-[#E0C179]" />
+                  <span>Тип и количество номеров (можно выбрать несколько):</span>
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {/* Карточка 1: Standard */}
+                  <div
+                    className={`p-3 rounded-sm border transition-all flex flex-col justify-between ${
+                      rooms.standard > 0
+                        ? 'bg-white/10 border-[#B82626] shadow-xs'
+                        : 'bg-white/5 border-white/10 text-stone-400 opacity-60'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-xs font-semibold text-white leading-tight">
+                        {config.room_standard_name}
+                      </div>
+                      <div className="text-[10px] text-stone-400 mt-0.5">2 гостя в номере</div>
+                    </div>
+                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={() => handleRoomCountChange('standard', -1)}
+                        className="cursor-pointer p-1 rounded-xs bg-white/10 hover:bg-white/20 text-white transition-colors"
+                      >
+                        <Minus className="h-3.5 w-3.5" />
+                      </button>
+                      <span className="font-mono text-sm font-bold text-white px-2">
+                        {rooms.standard}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRoomCountChange('standard', 1)}
+                        className="cursor-pointer p-1 rounded-xs bg-[#B82626] hover:bg-[#8B1515] text-white transition-colors"
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Карточка 2: Superior */}
+                  <div
+                    className={`p-3 rounded-sm border transition-all flex flex-col justify-between ${
+                      rooms.superior > 0
+                        ? 'bg-white/10 border-[#B82626] shadow-xs'
+                        : 'bg-white/5 border-white/10 text-stone-400 opacity-60'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-xs font-semibold text-white leading-tight">
+                        {config.room_superior_name}
+                      </div>
+                      <div className="text-[10px] text-stone-400 mt-0.5">+ Простор / 2 гостя</div>
+                    </div>
+                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={() => handleRoomCountChange('superior', -1)}
+                        className="cursor-pointer p-1 rounded-xs bg-white/10 hover:bg-white/20 text-white transition-colors"
+                      >
+                        <Minus className="h-3.5 w-3.5" />
+                      </button>
+                      <span className="font-mono text-sm font-bold text-white px-2">
+                        {rooms.superior}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRoomCountChange('superior', 1)}
+                        className="cursor-pointer p-1 rounded-xs bg-[#B82626] hover:bg-[#8B1515] text-white transition-colors"
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Карточка 3: Single */}
+                  <div
+                    className={`p-3 rounded-sm border transition-all flex flex-col justify-between ${
+                      rooms.single > 0
+                        ? 'bg-white/10 border-[#B82626] shadow-xs'
+                        : 'bg-white/5 border-white/10 text-stone-400 opacity-60'
+                    }`}
+                  >
+                    <div>
+                      <div className="text-xs font-semibold text-white leading-tight">
+                        {config.room_single_name}
+                      </div>
+                      <div className="text-[10px] text-stone-400 mt-0.5">1 человек в номере</div>
+                    </div>
+                    <div className="flex items-center justify-between mt-3 pt-2 border-t border-white/10">
+                      <button
+                        type="button"
+                        onClick={() => handleRoomCountChange('single', -1)}
+                        className="cursor-pointer p-1 rounded-xs bg-white/10 hover:bg-white/20 text-white transition-colors"
+                      >
+                        <Minus className="h-3.5 w-3.5" />
+                      </button>
+                      <span className="font-mono text-sm font-bold text-white px-2">
+                        {rooms.single}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleRoomCountChange('single', 1)}
+                        className="cursor-pointer p-1 rounded-xs bg-[#B82626] hover:bg-[#8B1515] text-white transition-colors"
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Количество путешественников */}
+              <div className="mb-6">
+                <label className="text-xs uppercase tracking-wider text-stone-400 block mb-2 font-medium flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Users className="h-3.5 w-3.5 text-[#E0C179]" />
+                    <span>Всего путешественников:</span>
+                  </span>
+                  <span className="text-[11px] text-[#E0C179] font-normal">
+                    (рассчитано по номерам: {travelers} чел.)
+                  </span>
                 </label>
                 <div className="grid grid-cols-4 gap-2">
                   {[1, 2, 3, 4].map((num) => (
@@ -213,7 +370,7 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
                 </div>
               </div>
 
-              {/* 2. Сезоны */}
+              {/* 3. Сезон поездки */}
               <div className="mb-6">
                 <label className="text-xs uppercase tracking-wider text-stone-400 block mb-2 font-medium flex items-center gap-1.5">
                   <Calendar className="h-3.5 w-3.5 text-[#E0C179]" />
@@ -238,35 +395,7 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
                 </div>
               </div>
 
-              {/* 3. Номера */}
-              <div className="mb-6">
-                <label className="text-xs uppercase tracking-wider text-stone-400 block mb-2 font-medium flex items-center gap-1.5">
-                  <Hotel className="h-3.5 w-3.5 text-[#E0C179]" />
-                  <span>Тип номера:</span>
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { id: 'standard', label: config.room_standard_name },
-                    { id: 'superior', label: config.room_superior_name },
-                    { id: 'single', label: config.room_single_name },
-                  ].map((r) => (
-                    <button
-                      key={r.id}
-                      type="button"
-                      onClick={() => setRoomType(r.id as any)}
-                      className={`cursor-pointer p-2.5 rounded-sm text-left border transition-all ${
-                        roomType === r.id
-                          ? 'bg-[#B82626] border-[#B82626] text-white shadow-xs'
-                          : 'bg-white/5 border-white/10 text-stone-300 hover:bg-white/10'
-                      }`}
-                    >
-                      <div className="text-xs font-semibold leading-tight">{r.label}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* 4. Дополнительные услуги */}
+              {/* 4. Дополнительные впечатления */}
               <div>
                 <label className="text-xs uppercase tracking-wider text-stone-400 block mb-2 font-medium">
                   Дополнительные впечатления (по желанию):
@@ -323,19 +452,19 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
             {/* Итоговая стоимость */}
             <div className="pt-6 border-t border-white/10 bg-black/40 p-5 rounded-sm border border-white/10">
               <div className="text-xs uppercase tracking-widest text-stone-400 mb-1">
-                Ориентировочная стоимость:
+                Ориентировочная стоимость ({roomsSummaryText}):
               </div>
               <div className="flex items-baseline gap-3">
                 <span className="font-display text-3xl sm:text-4xl font-bold text-[#E0C179] font-mono tabular-nums">
-                  {config.currency_primary_symbol}{pricePerPersonPrimary}
+                  {config.currency_primary_symbol}{priceTotalPrimary}
                 </span>
-                <span className="text-xs text-stone-400">/ человек</span>
+                <span className="text-xs text-stone-400">/ всего за {travelers} чел</span>
                 <span className="text-xs text-stone-500 font-mono">
-                  (Итого за {travelers} чел: {config.currency_primary_symbol}{priceTotalPrimary} · ≈ {config.currency_secondary_symbol}{priceTotalSecondary})
+                  (≈ {config.currency_secondary_symbol}{priceTotalSecondary})
                 </span>
               </div>
               <p className="text-[11px] text-stone-400 mt-2 font-light">
-                *Включает 6 ночей с завтраками, Синкансэн, билеты в Диснейленд, 3 дня с гидом и все трансферы. Финальный расчет фиксируется в договоре.
+                *В среднем около {config.currency_primary_symbol}{pricePerPersonPrimary} на человека. Включает отели, Синкансэн, билеты в Диснейленд, 3 дня с гидом и все трансферы.
               </p>
             </div>
           </div>
