@@ -43,19 +43,19 @@ export const RouteMap: React.FC = () => {
                 <span>Хонсю • Линия Синкансэн Токайдо</span>
               </div>
 
-              {/* SVG-СЛОЙ: ТОЛЬКО ЖИВОЙ ПОЕЗД И ЗОЛОТАЯ ЛИНИЯ МОСТА */}
+              {/* SVG-СЛОЙ: ПОЕЗД И ЗОЛОТАЯ ЛИНИЯ МОСТА */}
               <svg
                 viewBox="0 0 1000 562"
                 className="absolute inset-0 w-full h-full z-10 pointer-events-none"
               >
                 <defs>
-                  {/* Луч света от фар поезда */}
+                  {/* Луч света фар поезда */}
                   <linearGradient id="headlightGlow" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#FFF9C4" stopOpacity="0.95" />
                     <stop offset="100%" stopColor="#FFF9C4" stopOpacity="0" />
                   </linearGradient>
 
-                  {/* Золотая трасса на мосту */}
+                  {/* Золотая подсветка рельсов */}
                   <linearGradient id="bridgeRail" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#FFE066" stopOpacity="0.8" />
                     <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.95" />
@@ -63,11 +63,10 @@ export const RouteMap: React.FC = () => {
                   </linearGradient>
                 </defs>
 
-                {/* ТОЧНЕЙШАЯ ТРАЕКТОРИЯ БЕЛОГО МОСТА НА ВАШЕМ ФОТО */}
-                {/* От башни Токио (715, 278) -> плавно через правые клены (600, 310) -> нижняя точка у воды у Фудзи (490, 332) -> изгиб через левые клены (370, 288) -> Пагода (240, 285) */}
+                {/* ЮВЕЛИРНО ОПУЩЕННАЯ ТРАЕКТОРИЯ РОВНО НА БЕТОННОЕ ПОЛОТНО МОСТА */}
                 <path
                   id="shinkansenBridgeTrack"
-                  d="M 715,278 C 630,290 560,332 490,332 C 420,332 315,275 240,285"
+                  d="M 715,298 C 630,312 565,354 490,354 C 415,354 320,298 245,308"
                   fill="none"
                   stroke="url(#bridgeRail)"
                   strokeWidth="2.5"
@@ -75,24 +74,24 @@ export const RouteMap: React.FC = () => {
                   opacity="0.85"
                 />
 
-                {/* ЖИВОЙ СИНКАНСЭН С ФАРАМИ СТРОГО НА РЕЛЬСАХ */}
+                {/* СИНКАНСЭН С ФАРАМИ СТРОГО НА БЕТОННОМ МОСТУ */}
                 <g>
                   <animateMotion
                     dur="7s"
                     repeatCount="indefinite"
                     rotate="auto"
-                    path="M 715,278 C 630,290 560,332 490,332 C 420,332 315,275 240,285"
+                    path="M 715,298 C 630,312 565,354 490,354 C 415,354 320,298 245,308"
                   />
-                  {/* Луч света фар вперед */}
+                  {/* Луч света фар */}
                   <polygon points="12,0 46,-8 46,8" fill="url(#headlightGlow)" />
-                  {/* Корпус поезда N700S */}
-                  <rect x="-14" y="-4.5" width="28" height="9" rx="4" fill="#FFFFFF" stroke="#004499" strokeWidth="1.2" />
-                  <rect x="-8" y="-1.5" width="18" height="2" fill="#0066CC" />
-                  <circle cx="12" cy="0" r="2" fill="#FFF9C4" />
+                  {/* Корпус поезда N700S, стоящий колесами на мосту */}
+                  <rect x="-14" y="-6" width="28" height="8" rx="4" fill="#FFFFFF" stroke="#004499" strokeWidth="1.2" />
+                  <rect x="-8" y="-3" width="18" height="2" fill="#0066CC" />
+                  <circle cx="12" cy="-1" r="2" fill="#FFF9C4" />
                 </g>
               </svg>
 
-              {/* ИНТЕРАКТИВНЫЕ МЕТКИ: ЧИСТЫЙ HTML (БОЛЬШЕ НИКАКИХ НАЛОЖЕНИЙ БУКВ НА ИКОНКИ!) */}
+              {/* ИНТЕРАКТИВНЫЕ МЕТКИ (ЧИСТЫЙ HTML FLEXBOX) */}
               <div className="absolute inset-0 z-20 pointer-events-auto">
 
                 {/* 1. ТОКИО: над красной башней */}
