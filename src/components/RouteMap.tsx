@@ -23,147 +23,167 @@ export const RouteMap: React.FC = () => {
           </p>
         </div>
 
-        {/* Главная карточка: Двухколоночный Grid с жесткой фиксацией */}
+        {/* Главная карточка: Двухколоночный Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 bg-white rounded-xl border border-stone-200 shadow-sm p-4 sm:p-6 lg:p-8 items-start">
           
-          {/* Левая колонка: Карта (Ровно 7 колонок из 12, min-w-0 защищает от вылезания) */}
+          {/* Левая колонка: Карта (7 колонок из 12) */}
           <div className="lg:col-span-7 w-full min-w-0">
-            <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-lg overflow-hidden border border-stone-300 shadow-md bg-sky-100">
+            <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-xl overflow-hidden border border-stone-200 shadow-md bg-sky-100 select-none">
               
-              {/* Фоновое 3D-изображение */}
+              {/* Фотография 3D-карты */}
               <img
                 src="/images/japan-map-3d.jpg"
                 alt="3D Карта тура по Японии"
-                className="w-full h-full object-cover block select-none pointer-events-none"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/images/japan-map-3d.jpg';
-                }}
+                className="w-full h-full object-cover block pointer-events-none"
               />
 
               {/* Плашка компаса в углу */}
-              <div className="absolute top-3 left-3 text-stone-800 text-[10px] font-mono tracking-wider uppercase flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-xs z-20 pointer-events-none">
+              <div className="absolute top-3 left-3 text-stone-800 text-[10px] sm:text-xs font-mono tracking-wider uppercase flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-xs z-20 pointer-events-none">
                 <Navigation className="h-3 w-3 text-[#B82626] animate-spin" style={{ animationDuration: '24s' }} />
                 <span>Хонсю • Линия Синкансэн Токайдо</span>
               </div>
 
-              {/* ИНТЕРАКТИВНЫЙ СЛОЙ: МЕТКИ И ПОЕЗД СТРОГО ПО МОСТУ */}
+              {/* SVG-СЛОЙ: ТОЛЬКО ЖИВОЙ ПОЕЗД И ЗОЛОТАЯ ЛИНИЯ МОСТА */}
               <svg
                 viewBox="0 0 1000 562"
-                className="absolute inset-0 w-full h-full z-10 select-none"
+                className="absolute inset-0 w-full h-full z-10 pointer-events-none"
               >
                 <defs>
-                  {/* Луч света от фар */}
-                  <linearGradient id="headlightBeam" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#FFF9C4" stopOpacity="0.9" />
+                  {/* Луч света от фар поезда */}
+                  <linearGradient id="headlightGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#FFF9C4" stopOpacity="0.95" />
                     <stop offset="100%" stopColor="#FFF9C4" stopOpacity="0" />
                   </linearGradient>
 
-                  {/* Золотая подсветка рельсов */}
-                  <linearGradient id="railGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                  {/* Золотая трасса на мосту */}
+                  <linearGradient id="bridgeRail" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="#FFE066" stopOpacity="0.8" />
-                    <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.9" />
+                    <stop offset="50%" stopColor="#FFFFFF" stopOpacity="0.95" />
                     <stop offset="100%" stopColor="#FFE066" stopOpacity="0.8" />
                   </linearGradient>
-
-                  <filter id="badgeShadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="3" stdDeviation="4" floodColor="#000000" floodOpacity="0.3" />
-                  </filter>
                 </defs>
 
-                {/* 1. ТОЧНАЯ ТРАЕКТОРИЯ МОСТА НА ВАШЕМ ФОТО */}
-                {/* От башни Токио (730, 280) через клёны (610, 310) к воде у Фудзи (480, 350) и в Киото (235, 335) */}
+                {/* ТОЧНЕЙШАЯ ТРАЕКТОРИЯ БЕЛОГО МОСТА НА ВАШЕМ ФОТО */}
+                {/* От башни Токио (715, 278) -> плавно через правые клены (600, 310) -> нижняя точка у воды у Фудзи (490, 332) -> изгиб через левые клены (370, 288) -> Пагода (240, 285) */}
                 <path
-                  id="bridgeExactPath"
-                  d="M 730,280 C 660,290 580,350 480,350 C 390,350 310,310 235,335"
+                  id="shinkansenBridgeTrack"
+                  d="M 715,278 C 630,290 560,332 490,332 C 420,332 315,275 240,285"
                   fill="none"
-                  stroke="url(#railGlow)"
+                  stroke="url(#bridgeRail)"
                   strokeWidth="2.5"
                   strokeDasharray="4 4"
-                  opacity="0.75"
+                  opacity="0.85"
                 />
 
-                {/* 2. СИНКАНСЭН, МЧАЩИЙСЯ СТРОГО ПО МОСТУ */}
+                {/* ЖИВОЙ СИНКАНСЭН С ФАРАМИ СТРОГО НА РЕЛЬСАХ */}
                 <g>
                   <animateMotion
                     dur="7s"
                     repeatCount="indefinite"
                     rotate="auto"
-                    path="M 730,280 C 660,290 580,350 480,350 C 390,350 310,310 235,335"
+                    path="M 715,278 C 630,290 560,332 490,332 C 420,332 315,275 240,285"
                   />
-                  {/* Луч фар вперед */}
-                  <polygon points="12,0 44,-8 44,8" fill="url(#headlightBeam)" />
+                  {/* Луч света фар вперед */}
+                  <polygon points="12,0 46,-8 46,8" fill="url(#headlightGlow)" />
                   {/* Корпус поезда N700S */}
                   <rect x="-14" y="-4.5" width="28" height="9" rx="4" fill="#FFFFFF" stroke="#004499" strokeWidth="1.2" />
                   <rect x="-8" y="-1.5" width="18" height="2" fill="#0066CC" />
                   <circle cx="12" cy="0" r="2" fill="#FFF9C4" />
                 </g>
-
-                {/* 3. ТОЧНЫЕ ПАРЯЩИЕ МЕТКИ НАД ОБЪЕКТАМИ ФОТО */}
-
-                {/* ТОКИО: над красной башней справа */}
-                <g className="cursor-pointer group" onClick={() => setActiveStopId('tokyo')} transform="translate(730, 240)">
-                  {activeStopId === 'tokyo' && <circle r="22" fill="#E53E3E" opacity="0.35" className="animate-ping" />}
-                  <rect x="-34" y="-36" width="68" height="32" rx="8" fill="#FFFFFF" stroke={activeStopId === 'tokyo' ? '#C53030' : '#E2E8F0'} strokeWidth={activeStopId === 'tokyo' ? '2.5' : '1.5'} filter="url(#badgeShadow)" />
-                  <text x="-16" y="-16" fontSize="13">🗼</text>
-                  <text x="8" y="-15" fill="#1A202C" fontSize="10" fontWeight="bold" textAnchor="middle">Токио</text>
-                  <line x1="0" y1="-4" x2="0" y2="12" stroke="#C53030" strokeWidth="2" />
-                  <circle cx="0" cy="12" r="3.5" fill="#C53030" />
-                </g>
-
-                {/* ДИСНЕЙЛЕНД: чуть правее в заливе */}
-                <g className="cursor-pointer group" onClick={() => setActiveStopId('disney')} transform="translate(805, 215)">
-                  {activeStopId === 'disney' && <circle r="18" fill="#D69E2E" opacity="0.35" className="animate-ping" />}
-                  <rect x="-36" y="-32" width="72" height="28" rx="7" fill="#FFFFFF" stroke={activeStopId === 'disney' ? '#D69E2E' : '#E2E8F0'} strokeWidth={activeStopId === 'disney' ? '2.5' : '1.5'} filter="url(#badgeShadow)" />
-                  <text x="-18" y="-14" fontSize="12">🏰</text>
-                  <text x="8" y="-14" fill="#744210" fontSize="9" fontWeight="bold" textAnchor="middle">Дисней</text>
-                  <line x1="0" y1="-4" x2="0" y2="10" stroke="#D69E2E" strokeWidth="2" />
-                  <circle cx="0" cy="10" r="3" fill="#D69E2E" />
-                </g>
-
-                {/* ГОРА ФУДЗИ: строго над белой шапкой вулкана */}
-                <g className="cursor-pointer group" onClick={() => setActiveStopId('shinkansen')} transform="translate(515, 140)">
-                  {activeStopId === 'shinkansen' && <circle r="22" fill="#E53E3E" opacity="0.35" className="animate-ping" />}
-                  <rect x="-42" y="-32" width="84" height="30" rx="8" fill="#FFFFFF" stroke={activeStopId === 'shinkansen' ? '#C53030' : '#E2E8F0'} strokeWidth={activeStopId === 'shinkansen' ? '2.5' : '1.5'} filter="url(#badgeShadow)" />
-                  <text x="-22" y="-13" fontSize="13">🗻</text>
-                  <text x="10" y="-12" fill="#1A202C" fontSize="10" fontWeight="bold" textAnchor="middle">Фудзияма</text>
-                  <line x1="0" y1="-2" x2="0" y2="14" stroke="#C53030" strokeWidth="2" />
-                  <circle cx="0" cy="14" r="3.5" fill="#C53030" />
-                </g>
-
-                {/* КИОТО: строго над пагодой слева */}
-                <g className="cursor-pointer group" onClick={() => setActiveStopId('kyoto')} transform="translate(195, 290)">
-                  {activeStopId === 'kyoto' && <circle r="22" fill="#E53E3E" opacity="0.35" className="animate-ping" />}
-                  <rect x="-34" y="-36" width="68" height="32" rx="8" fill="#FFFFFF" stroke={activeStopId === 'kyoto' ? '#C53030' : '#E2E8F0'} strokeWidth={activeStopId === 'kyoto' ? '2.5' : '1.5'} filter="url(#badgeShadow)" />
-                  <text x="-16" y="-16" fontSize="13">⛩️</text>
-                  <text x="8" y="-15" fill="#1A202C" fontSize="10" fontWeight="bold" textAnchor="middle">Киото</text>
-                  <line x1="0" y1="-4" x2="0" y2="12" stroke="#C53030" strokeWidth="2" />
-                  <circle cx="0" cy="12" r="3.5" fill="#C53030" />
-                </g>
-
-                {/* НАРА: южнее пагоды Киото в холмах */}
-                <g className="cursor-pointer group" onClick={() => setActiveStopId('nara')} transform="translate(285, 360)">
-                  {activeStopId === 'nara' && <circle r="18" fill="#D69E2E" opacity="0.35" className="animate-ping" />}
-                  <rect x="-30" y="-32" width="60" height="28" rx="7" fill="#FFFFFF" stroke={activeStopId === 'nara' ? '#D69E2E' : '#E2E8F0'} strokeWidth={activeStopId === 'nara' ? '2.5' : '1.5'} filter="url(#badgeShadow)" />
-                  <text x="-15" y="-14" fontSize="12">🦌</text>
-                  <text x="8" y="-14" fill="#744210" fontSize="9" fontWeight="bold" textAnchor="middle">Нара</text>
-                  <line x1="0" y1="-4" x2="0" y2="10" stroke="#D69E2E" strokeWidth="2" />
-                  <circle cx="0" cy="10" r="3" fill="#D69E2E" />
-                </g>
-
-                {/* ОСАКА KIX: морской залив на крайнем западе */}
-                <g className="cursor-pointer group" onClick={() => setActiveStopId('osaka')} transform="translate(100, 360)">
-                  {activeStopId === 'osaka' && <circle r="22" fill="#E53E3E" opacity="0.35" className="animate-ping" />}
-                  <rect x="-42" y="-36" width="84" height="32" rx="8" fill="#FFFFFF" stroke={activeStopId === 'osaka' ? '#C53030' : '#E2E8F0'} strokeWidth={activeStopId === 'osaka' ? '2.5' : '1.5'} filter="url(#badgeShadow)" />
-                  <text x="-22" y="-16" fontSize="12">✈️</text>
-                  <text x="12" y="-15" fill="#1A202C" fontSize="9" fontWeight="bold" textAnchor="middle">Осака KIX</text>
-                  <line x1="0" y1="-4" x2="0" y2="12" stroke="#C53030" strokeWidth="2" />
-                  <circle cx="0" cy="12" r="3.5" fill="#C53030" />
-                </g>
               </svg>
+
+              {/* ИНТЕРАКТИВНЫЕ МЕТКИ: ЧИСТЫЙ HTML (БОЛЬШЕ НИКАКИХ НАЛОЖЕНИЙ БУКВ НА ИКОНКИ!) */}
+              <div className="absolute inset-0 z-20 pointer-events-auto">
+
+                {/* 1. ТОКИО: над красной башней */}
+                <button
+                  onClick={() => setActiveStopId('tokyo')}
+                  style={{ left: '71.5%', top: '48%' }}
+                  className={`cursor-pointer absolute -translate-x-1/2 -translate-y-full transition-transform hover:scale-110 flex items-center gap-1.5 px-2.5 py-1 rounded-full shadow-md ${
+                    activeStopId === 'tokyo'
+                      ? 'bg-white ring-2 ring-[#B82626] scale-105'
+                      : 'bg-white/95 border border-stone-200'
+                  }`}
+                >
+                  <span className="text-sm">🗼</span>
+                  <span className="text-xs font-bold text-stone-900 whitespace-nowrap">Токио</span>
+                </button>
+
+                {/* 2. ДИСНЕЙЛЕНД: побережье чуть выше Токио */}
+                <button
+                  onClick={() => setActiveStopId('disney')}
+                  style={{ left: '78.5%', top: '38%' }}
+                  className={`cursor-pointer absolute -translate-x-1/2 -translate-y-full transition-transform hover:scale-110 flex items-center gap-1.5 px-2 py-0.5 rounded-full shadow-md ${
+                    activeStopId === 'disney'
+                      ? 'bg-white ring-2 ring-[#D4AF37] scale-105'
+                      : 'bg-white/95 border border-stone-200'
+                  }`}
+                >
+                  <span className="text-xs">🏰</span>
+                  <span className="text-[11px] font-bold text-amber-900 whitespace-nowrap">Дисней</span>
+                </button>
+
+                {/* 3. ГОРА ФУДЗИ: строго над белой шапкой вулкана */}
+                <button
+                  onClick={() => setActiveStopId('shinkansen')}
+                  style={{ left: '52%', top: '24%' }}
+                  className={`cursor-pointer absolute -translate-x-1/2 -translate-y-full transition-transform hover:scale-110 flex items-center gap-1.5 px-3 py-1 rounded-full shadow-md ${
+                    activeStopId === 'shinkansen'
+                      ? 'bg-white ring-2 ring-[#B82626] scale-105'
+                      : 'bg-white/95 border border-stone-200'
+                  }`}
+                >
+                  <span className="text-sm">🗻</span>
+                  <span className="text-xs font-bold text-stone-900 whitespace-nowrap">Фудзияма</span>
+                </button>
+
+                {/* 4. КИОТО: строго над пагодой слева */}
+                <button
+                  onClick={() => setActiveStopId('kyoto')}
+                  style={{ left: '22.5%', top: '48%' }}
+                  className={`cursor-pointer absolute -translate-x-1/2 -translate-y-full transition-transform hover:scale-110 flex items-center gap-1.5 px-2.5 py-1 rounded-full shadow-md ${
+                    activeStopId === 'kyoto'
+                      ? 'bg-white ring-2 ring-[#B82626] scale-105'
+                      : 'bg-white/95 border border-stone-200'
+                  }`}
+                >
+                  <span className="text-sm">⛩️</span>
+                  <span className="text-xs font-bold text-stone-900 whitespace-nowrap">Киото</span>
+                </button>
+
+                {/* 5. НАРА: южнее моста в зеленых холмах */}
+                <button
+                  onClick={() => setActiveStopId('nara')}
+                  style={{ left: '31%', top: '58%' }}
+                  className={`cursor-pointer absolute -translate-x-1/2 -translate-y-full transition-transform hover:scale-110 flex items-center gap-1.5 px-2 py-0.5 rounded-full shadow-md ${
+                    activeStopId === 'nara'
+                      ? 'bg-white ring-2 ring-[#C5A059] scale-105'
+                      : 'bg-white/95 border border-stone-200'
+                  }`}
+                >
+                  <span className="text-xs">🦌</span>
+                  <span className="text-[11px] font-bold text-stone-800 whitespace-nowrap">Нара</span>
+                </button>
+
+                {/* 6. ОСАКА KIX: морская лагуна на крайнем западе */}
+                <button
+                  onClick={() => setActiveStopId('osaka')}
+                  style={{ left: '14%', top: '56%' }}
+                  className={`cursor-pointer absolute -translate-x-1/2 -translate-y-full transition-transform hover:scale-110 flex items-center gap-1.5 px-2.5 py-1 rounded-full shadow-md ${
+                    activeStopId === 'osaka'
+                      ? 'bg-white ring-2 ring-[#B82626] scale-105'
+                      : 'bg-white/95 border border-stone-200'
+                  }`}
+                >
+                  <span className="text-xs">✈️</span>
+                  <span className="text-xs font-bold text-stone-900 whitespace-nowrap">Осака KIX</span>
+                </button>
+
+              </div>
             </div>
           </div>
 
-          {/* Правая колонка: Детали пункта (Ровно 5 колонок из 12, min-w-0 защищает верстку) */}
+          {/* Правая колонка: Детали пункта (5 колонок из 12) */}
           <div className="lg:col-span-5 w-full min-w-0 flex flex-col justify-between space-y-5">
             <div>
               <div className="flex items-center justify-between pb-2.5 border-b border-stone-200">
