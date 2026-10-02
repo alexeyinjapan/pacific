@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TOUR_HOTELS, HotelInfo } from '../data/tourData';
-import { Check, MapPin, Coffee, Wifi, Sparkles, Bed, Shield } from 'lucide-react';
+import { Check, MapPin, Coffee, Sparkles, Bed, Shield } from 'lucide-react';
 
 export const Hotels: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'fresa-ginza' | 'fresa-kyoto'>('fresa-ginza');
@@ -19,12 +19,12 @@ export const Hotels: React.FC = () => {
             Где вы будете жить: центры городов и комфорт без компромиссов
           </h2>
           <p className="mt-3 text-stone-300 text-base font-light">
-            Мы не селим туристов в отдаленных спальных районах. Вы живете в фешенебельной Гинзе (Токио) и у центрального вокзала Киото с включенными горячими завтраками. Если эти отели переполнены и нет возможности их забронировать, мы предложим альтернативное равноценное размещение. 
+            Мы не селим туристов в отдаленных спальных районах. Вы живете в фешенебельной Гинзе (Токио) и у центрального вокзала Киото с включенными горячими завтраками.
           </p>
         </div>
 
-        {/* Hotel Switcher Segmented Control */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-10">
+        {/* 1. ЭКРАННЫЙ ВИД: Переключатель отелей (Скрывается при печати) */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-10 print:hidden">
           {TOUR_HOTELS.map((hotel) => (
             <button
               key={hotel.id}
@@ -52,9 +52,8 @@ export const Hotels: React.FC = () => {
           ))}
         </div>
 
-        {/* Selected Hotel In-Depth Showcase */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch bg-white/5 border border-white/10 rounded-sm p-6 lg:p-10 backdrop-blur-xs">
-          {/* Left Column: Visual & Badges (5 cols) */}
+        {/* 1. ЭКРАННЫЙ ВИД: Показывает выбранный отель (Скрывается при печати) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch bg-white/5 border border-white/10 rounded-sm p-6 lg:p-10 backdrop-blur-xs print:hidden">
           <div className="lg:col-span-5 flex flex-col justify-between">
             <div className="relative rounded-sm overflow-hidden aspect-4/3 border border-white/15 shadow-xl mb-6">
               <img
@@ -74,7 +73,6 @@ export const Hotels: React.FC = () => {
               </div>
             </div>
 
-            {/* Breakfast highlight box */}
             <div className="rounded-sm bg-black/40 border border-white/10 p-5">
               <div className="flex items-start gap-3">
                 <Coffee className="h-5 w-5 text-[#E0C179] shrink-0 mt-0.5" />
@@ -90,7 +88,6 @@ export const Hotels: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Hotel Details & Amenities (7 cols) */}
           <div className="lg:col-span-7 flex flex-col justify-between">
             <div>
               <div className="flex items-center gap-3 text-xs text-stone-400 mb-2">
@@ -100,27 +97,21 @@ export const Hotels: React.FC = () => {
                 <span>·</span>
                 <span className="text-[#E0C179]">Завтрак включен</span>
               </div>
-
               <h3 className="font-display text-2xl sm:text-3xl font-semibold text-white mb-3">
                 {selectedHotel.name}
               </h3>
-
               <p className="text-xs text-stone-400 mb-4 flex items-center gap-1.5">
                 <MapPin className="h-3.5 w-3.5 text-[#B82626]" />
                 <span>{selectedHotel.location}</span>
               </p>
-
               <p className="text-sm sm:text-base text-stone-300 font-light leading-relaxed mb-6">
                 {selectedHotel.description}
               </p>
-
-              {/* Amenities Grid */}
               <div className="pt-6 border-t border-white/10">
                 <div className="text-xs font-semibold uppercase tracking-wider text-[#E0C179] mb-4 flex items-center gap-1.5">
                   <Sparkles className="h-4 w-4" />
                   <span>Удобства и сервис в отеле:</span>
                 </div>
-
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {selectedHotel.features.map((feature, i) => (
                     <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-stone-200">
@@ -133,20 +124,50 @@ export const Hotels: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            {/* Bottom guarantee */}
-            <div className="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-stone-400">
-              <div className="flex items-center gap-2">
-                <Bed className="h-4 w-4 text-[#E0C179]" />
-                <span>Опции размещения: Twin (раздельные кровати) / Double (одна большая кровать) / Single (одноместный номер)</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4 text-[#E0C179]" />
-                <span>Возможен апгрейд категории номера по запросу</span>
-              </div>
-            </div>
           </div>
         </div>
+
+        {/* 2. РЕЖИМ ПЕЧАТИ В PDF: Выводит подряд ОБА ОТЕЛЯ! */}
+        <div className="hidden print:block space-y-12">
+          {TOUR_HOTELS.map((hotel) => (
+            <div
+              key={hotel.id}
+              className="p-8 rounded-lg bg-stone-900 border border-stone-800 text-white break-inside-avoid"
+              style={{ pageBreakInside: 'avoid' }}
+            >
+              <div className="grid grid-cols-12 gap-8 items-start">
+                <div className="col-span-5">
+                  <img
+                    src={hotel.image}
+                    alt={hotel.name}
+                    className="w-full h-56 object-cover rounded-md border border-white/20 mb-3"
+                  />
+                  <div className="text-xs text-[#FFE066] font-semibold">{hotel.badge}</div>
+                  <div className="text-xs text-stone-400">{hotel.metroDist}</div>
+                </div>
+
+                <div className="col-span-7 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-mono text-[#E0C179]">
+                    <span>{hotel.city} • {hotel.nights} ночи</span>
+                    <span>•</span>
+                    <span>{hotel.stars}</span>
+                  </div>
+                  <h3 className="font-display text-2xl font-bold text-white">
+                    {hotel.name}
+                  </h3>
+                  <p className="text-xs text-stone-300 font-light leading-relaxed">
+                    {hotel.description}
+                  </p>
+                  <div className="p-3 bg-black/40 rounded-sm border border-white/10 text-xs">
+                    <span className="text-[#FFE066] font-bold block mb-1">Завтраки:</span>
+                    <span className="text-stone-300">{hotel.breakfast}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );
