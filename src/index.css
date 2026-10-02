@@ -75,3 +75,39 @@
   background: #C5A059;
   border-radius: 3px;
 }
+/* ПРАВИЛА ДЛЯ ИДЕАЛЬНОГО PDF */
+@media print {
+  /* 1. Принудительно раскрываем все скрытые блоки и спойлеры на максимум */
+  .accordion-content,
+  details[open],
+  details,
+  [data-state="closed"] {
+    display: block !important;
+    height: auto !important;
+    max-height: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  /* 2. Запрещаем разрывать карточки дней пополам между страницами */
+  .itinerary-day-card,
+  section,
+  article {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* 3. Скрываем ненужные в PDF элементы (плавающую шапку, летающие листья, форму ввода) */
+  header,
+  canvas,
+  button,
+  .no-print {
+    display: none !important;
+  }
+
+  /* 4. Включаем сочную фоновую графику и яркие цвета */
+  body {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+}
