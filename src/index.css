@@ -122,3 +122,29 @@
   }
 }
   }
+/* ПРИНУДИТЕЛЬНОЕ СОХРАНЕНИЕ В ОДИН НЕПРЕРЫВНЫЙ ЛИСТ БЕЗ РАЗРЫВОВ */
+@media print {
+  @page {
+    /* Задаем один длинный свиток (как рулон обоев) */
+    size: 1300px 7600px !important;
+    margin: 0 !important;
+  }
+
+  html, body {
+    width: 1300px !important;
+    min-height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #121214 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Убираем любые разрывы страниц */
+  * {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+    page-break-after: auto !important;
+    page-break-before: auto !important;
+  }
+}
