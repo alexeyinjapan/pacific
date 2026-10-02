@@ -75,11 +75,11 @@
   background: #C5A059;
   border-radius: 3px;
 }
-/* ЕДИНЫЙ ПРАВИЛЬНЫЙ БЛОК ДЛЯ ИДЕАЛЬНОГО PDF БЕЗ ПУСТОТ */
+/* ИДЕАЛЬНЫЙ PDF БЕЗ КАЛЬКУЛЯТОРА И ФУТЕРА */
 @media print {
   @page {
-    /* Фиксированный размер одного длинного свитка */
-    size: 1200px 5200px !important;
+    /* Уменьшенная высота (без калькулятора и футера) */
+    size: 1200px 4200px !important;
     margin: 0 !important;
   }
 
@@ -94,7 +94,6 @@
     print-color-adjust: exact !important;
   }
 
-  /* 1. ПРИНУДИТЕЛЬНО РАСКРЫВАЕМ ВСЕ СПОЙЛЕРЫ И СКРЫТЫЕ БЛОКИ */
   .accordion-content,
   details[open],
   details,
@@ -106,13 +105,11 @@
     visibility: visible !important;
   }
 
-  /* 2. УБИВАЕМ РЕЗИНОВУЮ ВЫСОТУ 100vh (КОТОРАЯ РАСТЯГИВАЛА САЙТ) */
   section, div, main {
     min-height: 0 !important;
     height: auto !important;
   }
 
-  /* 3. ПЕРВЫЙ ЭКРАН (HERO): ЖЕСТКО ФИКСИРУЕМ КОМПАКТНУЮ ВЫСОТУ */
   section:first-of-type,
   #hero {
     height: 650px !important;
@@ -124,20 +121,20 @@
     padding-bottom: 40px !important;
   }
 
-  /* 4. УМЕНЬШАЕМ ПУСТОТЫ МЕЖДУ СЕКЦИЯМИ */
   section {
     padding-top: 35px !important;
     padding-bottom: 35px !important;
   }
 
-  /* 5. СКРЫВАЕМ ЛИШНЕЕ: ПЛАВАЮЩУЮ ШАПКУ, ЛЕТАЮЩИЕ ЛИСТЬЯ И КНОПКИ */
+  /* СКРЫВАЕМ ШАПКУ, КАЛЬКУЛЯТОР И ФУТЕР ИЗ PDF */
   header,
   canvas,
+  #calculator,
+  footer,
   .no-print {
     display: none !important;
   }
 
-  /* 6. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ ВСЕ ЦВЕТА И ФОНЫ */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
