@@ -126,7 +126,7 @@ export const MomijiCanvas: React.FC = () => {
       {enabled && (
         <canvas
           ref={canvasRef}
-          className="pointer-events-none fixed inset-0 z-30 h-full w-full select-none"
+          className="pointer-events-none fixed inset-0 z-30 h-full w-full select-none print:hidden"
           aria-hidden="true"
         />
       )}

@@ -75,12 +75,12 @@
   background: #C5A059;
   border-radius: 3px;
 }
-/* ИДЕАЛЬНЫЙ PDF БЕЗ РАЗРЫВОВ И ЛИШНИХ КНОПОК */
+/* ЕДИНЫЙ ВАЛИДНЫЙ БЛОК ДЛЯ ИДЕАЛЬНОГО PDF */
 @media print {
   @page {
-    /* Автоматический размер свитка */
-    size: 1200px 5300px !important;
-    margin: 0 !important;
+    /* Точный размер единого полотна */
+    size: 1200px 4800px;
+    margin: 0;
   }
 
   html, body {
@@ -94,7 +94,7 @@
     print-color-adjust: exact !important;
   }
 
-  /* 1. ПРИНУДИТЕЛЬНО РАСКРЫВАЕМ ВСЕ 7 ДНЕЙ И ОБА ОТЕЛЯ */
+  /* 1. ПРИНУДИТЕЛЬНО РАСКРЫВАЕМ ВСЕ СПОЙЛЕРЫ */
   .accordion-content,
   details[open],
   details,
@@ -106,43 +106,41 @@
     visibility: visible !important;
   }
 
-  /* 2. СКРЫВАЕМ ВСЁ ЛИШНЕЕ: КНОПКУ МОМИДЗИ, КНОПКИ, ШАПКУ И ЛИСТЬЯ */
+  section, div, main {
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  /* 2. КОМПАКТНЫЙ ПЕРВЫЙ ЭКРАН */
+  section:first-of-type,
+  #hero {
+    height: 640px !important;
+    min-height: 640px !important;
+    max-height: 640px !important;
+    overflow: hidden !important;
+    padding-top: 70px !important;
+  }
+
+  section {
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
+  }
+
+  /* 3. ЖЕСТКО СКРЫВАЕМ: КАЛЬКУЛЯТОР, ФУТЕР, ШАПКУ, ЛИСТЬЯ И ВСЕ КНОПКИ */
   header,
+  footer,
+  #calculator,
   canvas,
   button,
-  .no-print,
-  /* Скрываем конкретно плашку момидзи */
-  div:has(> span:contains("Момидзи")),
-  div:has(button:contains("Момидзи")),
-  .fixed.bottom-4.left-4,
-  .fixed.bottom-6.left-6 {
+  .no-print {
     display: none !important;
   }
 
-  /* 3. ЗАПРЕЩАЕМ ОТРЫВАТЬ ЗАГОЛОВКИ ОТ КАРТЫ И КАРТОЧЕК */
-  h1, h2, h3, h4, .font-display {
-    break-after: avoid !important;
-    page-break-after: avoid !important;
-  }
-
-  section, .itinerary-day-card {
+  /* 4. ЗАПРЕТ РАЗРЫВОВ */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
     break-inside: auto !important;
     page-break-inside: auto !important;
-  }
-
-  /* 4. УМЕНЬШАЕМ ВЫСОТУ ПЕРВОГО ЭКРАНА */
-  section:first-of-type,
-  #hero {
-    height: 650px !important;
-    min-height: 650px !important;
-    max-height: 650px !important;
-    overflow: hidden !important;
-    padding-top: 80px !important;
-  }
-
-  /* 5. УМЕНЬШАЕМ ПУСТОТЫ МЕЖДУ СЕКЦИЯМИ */
-  section {
-    padding-top: 30px !important;
-    padding-bottom: 30px !important;
   }
 }
