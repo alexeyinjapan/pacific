@@ -135,7 +135,7 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
     setIsSubmitting(true);
 
     const telegramMessage = `
-🔥 <b>НОВАЯ ЗАЯВКА НА ТУР В ЯПОНИЮ!</b>
+🔥 <b>Тур Япония: между традицией и будущим</b>
 ━━━━━━━━━━━━━━━━━━
 👤 <b>Имя клиента:</b> ${name}
 📞 <b>Контакты:</b> ${contact}
@@ -163,7 +163,7 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          chat_id: config.telegram_chat_id || "5435183297",
+          chat_id: config.telegram_chat_id,
           message: telegramMessage,
         }),
       });
@@ -464,7 +464,8 @@ export const TourCalculator: React.FC<TourCalculatorProps> = ({ onSuccessSubmit 
                 </span>
               </div>
               <p className="text-[11px] text-stone-400 mt-2 font-light">
-                *В среднем около {config.currency_primary_symbol}{pricePerPersonPrimary} на человека. Включает отели, Синкансэн, билеты в Диснейленд, 3 дня с гидом и все трансферы.
+                *В среднем около {config.currency_primary_symbol}{pricePerPersonPrimary} на человека. Включает отели, Синкансэн, билеты в Диснейленд, 3 дня с гидом и все трансферы.  
+                Расчёт носит предварительный характер и не является публичной офертой. Финальная стоимость фиксируется в официальном договоре туроператора после подтверждения мест.
               </p>
             </div>
           </div>
