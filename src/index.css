@@ -78,10 +78,10 @@
 /* ИДЕАЛЬНЫЙ PDF БЕЗ КАЛЬКУЛЯТОРА И ФУТЕРА */
 @media print {
   @page {
-    /* Уменьшенная высота (без калькулятора и футера) */
-    size: 1200px 4200px !important;
-    margin: 0 !important;
-  }
+   /* Увеличиваем высоту до 4650px, чтобы контент не переваливал на 2-й лист */
+  size: 1200px 4650px !important;
+  margin: 0 !important;
+}
 
   html, body {
     width: 1200px !important;
