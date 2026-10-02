@@ -75,12 +75,12 @@
   background: #C5A059;
   border-radius: 3px;
 }
-/* ЕДИНЫЙ ЛИСТ НА 100% КОНТЕНТА БЕЗ РАЗРЫВОВ И ПУСТОТ */
+/* ЕДИНЫЙ ВАЛИДНЫЙ БЛОК ДЛЯ ИДЕАЛЬНОГО PDF */
 @media print {
   @page {
-    /* 5750px гарантирует, что ВСЁ от Дня 1 до условий тура поместится на 1 лист */
-    size: 1200px 5750px !important;
-    margin: 0 !important;
+    /* Точный размер единого полотна */
+    size: 1200px 4800px;
+    margin: 0;
   }
 
   html, body {
@@ -94,7 +94,7 @@
     print-color-adjust: exact !important;
   }
 
-  /* 1. РАСКРЫВАЕМ СПОЙЛЕРЫ */
+  /* 1. ПРИНУДИТЕЛЬНО РАСКРЫВАЕМ ВСЕ СПОЙЛЕРЫ */
   .accordion-content,
   details[open],
   details,
@@ -106,36 +106,27 @@
     visibility: visible !important;
   }
 
-  /* 2. СБРАСЫВАЕМ РЕЗИНОВЫЕ ВЫСОТЫ */
   section, div, main {
     min-height: 0 !important;
     height: auto !important;
   }
 
-  /* 3. КОМПАКТНЫЙ ПЕРВЫЙ ЭКРАН */
+  /* 2. КОМПАКТНЫЙ ПЕРВЫЙ ЭКРАН */
   section:first-of-type,
   #hero {
-    height: 600px !important;
-    min-height: 600px !important;
-    max-height: 600px !important;
+    height: 640px !important;
+    min-height: 640px !important;
+    max-height: 640px !important;
     overflow: hidden !important;
-    padding-top: 60px !important;
-    padding-bottom: 20px !important;
+    padding-top: 70px !important;
   }
 
-  /* 4. ПЛОТНЫЕ, КРАСИВЫЕ ОТСТУПЫ МЕЖДУ СЕКЦИЯМИ И ДНЯМИ */
   section {
-    padding-top: 20px !important;
-    padding-bottom: 20px !important;
+    padding-top: 25px !important;
+    padding-bottom: 25px !important;
   }
 
-  /* Уплотняем карточки дней, чтобы не было пустот */
-  .hidden.print\:block > div {
-    margin-bottom: 16px !important;
-    padding: 20px !important;
-  }
-
-  /* 5. ПОЛНОСТЬЮ СКРЫВАЕМ КАЛЬКУЛЯТОР, ФУТЕР, ШАПКУ И КНОПКУ МОМИДЗИ */
+  /* 3. ЖЕСТКО СКРЫВАЕМ: КАЛЬКУЛЯТОР, ФУТЕР, ШАПКУ, ЛИСТЬЯ И ВСЕ КНОПКИ */
   header,
   footer,
   #calculator,
@@ -145,13 +136,11 @@
     display: none !important;
   }
 
-  /* 6. УБИВАЕМ ПРИНУДИТЕЛЬНЫЕ РАЗРЫВЫ СТРАНИЦ */
+  /* 4. ЗАПРЕТ РАЗРЫВОВ */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     break-inside: auto !important;
     page-break-inside: auto !important;
-    page-break-after: auto !important;
-    page-break-before: auto !important;
   }
 }
