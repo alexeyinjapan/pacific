@@ -109,5 +109,16 @@
   body {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
+
+    /* Скрываем плавающую шапку, чтобы она не дублировалась на каждой странице */
+  header {
+    display: none !important;
+  }
+
+  /* Принудительно включаем печать фона в коде */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }
+  }
