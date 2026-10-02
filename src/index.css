@@ -75,9 +75,26 @@
   background: #C5A059;
   border-radius: 3px;
 }
-/* ПРАВИЛА ДЛЯ ИДЕАЛЬНОГО PDF */
+/* ЕДИНЫЙ ПРАВИЛЬНЫЙ БЛОК ДЛЯ ИДЕАЛЬНОГО PDF БЕЗ ПУСТОТ */
 @media print {
-  /* 1. Принудительно раскрываем все скрытые блоки и спойлеры на максимум */
+  @page {
+    /* Фиксированный размер одного длинного свитка */
+    size: 1200px 5200px !important;
+    margin: 0 !important;
+  }
+
+  html, body {
+    width: 1200px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #121214 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 1. ПРИНУДИТЕЛЬНО РАСКРЫВАЕМ ВСЕ СПОЙЛЕРЫ И СКРЫТЫЕ БЛОКИ */
   .accordion-content,
   details[open],
   details,
@@ -89,62 +106,42 @@
     visibility: visible !important;
   }
 
-  /* 2. Запрещаем разрывать карточки дней пополам между страницами */
-  .itinerary-day-card,
-  section,
-  article {
-    break-inside: avoid !important;
-    page-break-inside: avoid !important;
+  /* 2. УБИВАЕМ РЕЗИНОВУЮ ВЫСОТУ 100vh (КОТОРАЯ РАСТЯГИВАЛА САЙТ) */
+  section, div, main {
+    min-height: 0 !important;
+    height: auto !important;
   }
 
-  /* 3. Скрываем ненужные в PDF элементы (плавающую шапку, летающие листья, форму ввода) */
+  /* 3. ПЕРВЫЙ ЭКРАН (HERO): ЖЕСТКО ФИКСИРУЕМ КОМПАКТНУЮ ВЫСОТУ */
+  section:first-of-type,
+  #hero {
+    height: 650px !important;
+    min-height: 650px !important;
+    max-height: 650px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    padding-top: 80px !important;
+    padding-bottom: 40px !important;
+  }
+
+  /* 4. УМЕНЬШАЕМ ПУСТОТЫ МЕЖДУ СЕКЦИЯМИ */
+  section {
+    padding-top: 35px !important;
+    padding-bottom: 35px !important;
+  }
+
+  /* 5. СКРЫВАЕМ ЛИШНЕЕ: ПЛАВАЮЩУЮ ШАПКУ, ЛЕТАЮЩИЕ ЛИСТЬЯ И КНОПКИ */
   header,
   canvas,
-  button,
   .no-print {
     display: none !important;
   }
 
-  /* 4. Включаем сочную фоновую графику и яркие цвета */
-  body {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-
-    /* Скрываем плавающую шапку, чтобы она не дублировалась на каждой странице */
-  header {
-    display: none !important;
-  }
-
-  /* Принудительно включаем печать фона в коде */
+  /* 6. ПРИНУДИТЕЛЬНО ВКЛЮЧАЕМ ВСЕ ЦВЕТА И ФОНЫ */
   * {
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
-  }
-}
-  }
-/* ПРИНУДИТЕЛЬНОЕ СОХРАНЕНИЕ В ОДИН НЕПРЕРЫВНЫЙ ЛИСТ БЕЗ РАЗРЫВОВ */
-@media print {
-  @page {
-    /* Задаем один длинный свиток (как рулон обоев) */
-    size: 1300px 7600px !important;
-    margin: 0 !important;
-  }
-
-  html, body {
-    width: 1300px !important;
-    min-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background-color: #121214 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
-  /* Убираем любые разрывы страниц */
-  * {
     break-inside: auto !important;
     page-break-inside: auto !important;
-    page-break-after: auto !important;
-    page-break-before: auto !important;
   }
 }
