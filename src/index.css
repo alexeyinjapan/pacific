@@ -75,13 +75,13 @@
   background: #C5A059;
   border-radius: 3px;
 }
-/* ИДЕАЛЬНЫЙ PDF БЕЗ КАЛЬКУЛЯТОРА И ФУТЕРА */
+/* ИДЕАЛЬНЫЙ PDF БЕЗ РАЗРЫВОВ И ЛИШНИХ КНОПОК */
 @media print {
   @page {
-   /* Увеличиваем высоту до 5000px, чтобы контент не переваливал на 2-й лист */
-  size: 1200px 5000px !important;
-  margin: 0 !important;
-}
+    /* Автоматический размер свитка */
+    size: 1200px 5300px !important;
+    margin: 0 !important;
+  }
 
   html, body {
     width: 1200px !important;
@@ -94,6 +94,7 @@
     print-color-adjust: exact !important;
   }
 
+  /* 1. ПРИНУДИТЕЛЬНО РАСКРЫВАЕМ ВСЕ 7 ДНЕЙ И ОБА ОТЕЛЯ */
   .accordion-content,
   details[open],
   details,
@@ -105,40 +106,43 @@
     visibility: visible !important;
   }
 
-  section, div, main {
-    min-height: 0 !important;
-    height: auto !important;
+  /* 2. СКРЫВАЕМ ВСЁ ЛИШНЕЕ: КНОПКУ МОМИДЗИ, КНОПКИ, ШАПКУ И ЛИСТЬЯ */
+  header,
+  canvas,
+  button,
+  .no-print,
+  /* Скрываем конкретно плашку момидзи */
+  div:has(> span:contains("Момидзи")),
+  div:has(button:contains("Момидзи")),
+  .fixed.bottom-4.left-4,
+  .fixed.bottom-6.left-6 {
+    display: none !important;
   }
 
+  /* 3. ЗАПРЕЩАЕМ ОТРЫВАТЬ ЗАГОЛОВКИ ОТ КАРТЫ И КАРТОЧЕК */
+  h1, h2, h3, h4, .font-display {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  section, .itinerary-day-card {
+    break-inside: auto !important;
+    page-break-inside: auto !important;
+  }
+
+  /* 4. УМЕНЬШАЕМ ВЫСОТУ ПЕРВОГО ЭКРАНА */
   section:first-of-type,
   #hero {
     height: 650px !important;
     min-height: 650px !important;
     max-height: 650px !important;
     overflow: hidden !important;
-    position: relative !important;
     padding-top: 80px !important;
-    padding-bottom: 40px !important;
   }
 
+  /* 5. УМЕНЬШАЕМ ПУСТОТЫ МЕЖДУ СЕКЦИЯМИ */
   section {
-    padding-top: 35px !important;
-    padding-bottom: 35px !important;
-  }
-
-  /* СКРЫВАЕМ ШАПКУ, КАЛЬКУЛЯТОР И ФУТЕР ИЗ PDF */
-  header,
-  canvas,
-  #calculator,
-  footer,
-  .no-print {
-    display: none !important;
-  }
-
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    break-inside: auto !important;
-    page-break-inside: auto !important;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
   }
 }
