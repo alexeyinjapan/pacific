@@ -127,26 +127,30 @@ export const Hotels: React.FC = () => {
           </div>
         </div>
 
-        {/* 2. РЕЖИМ ПЕЧАТИ В PDF: Выводит подряд ОБА ОТЕЛЯ! */}
-<div className={`${typeof window !== 'undefined' && window.location.search.includes('export') ? 'block' : 'hidden print:block'} space-y-8`}>
+     {/* 2. РЕЖИМ ПЕЧАТИ И ЭКСПОРТА: Оба отеля (Фото сверху на всю ширину, текст снизу) */}
+        <div className={`${typeof window !== 'undefined' && window.location.search.includes('export') ? 'block' : 'hidden print:block'} space-y-8`}>
           {TOUR_HOTELS.map((hotel) => (
             <div
               key={hotel.id}
-              className="p-8 rounded-lg bg-stone-900 border border-stone-800 text-white break-inside-avoid"
+              className="p-5 sm:p-7 rounded-xl bg-stone-900 border border-stone-800 text-white break-inside-avoid"
               style={{ pageBreakInside: 'avoid' }}
             >
-              <div className="grid grid-cols-12 gap-8 items-start">
-                <div className="col-span-5">
+              {/* На телефоне grid-cols-1, на компьютере md:grid-cols-12 */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 items-start">
+                
+                {/* Фотография отеля */}
+                <div className="md:col-span-5 w-full">
                   <img
                     src={hotel.image}
                     alt={hotel.name}
-                    className="w-full h-56 object-cover rounded-md border border-white/20 mb-3"
+                    className="w-full aspect-[16/10] sm:h-56 object-cover rounded-lg border border-white/20 mb-2.5"
                   />
                   <div className="text-xs text-[#FFE066] font-semibold">{hotel.badge}</div>
                   <div className="text-xs text-stone-400">{hotel.metroDist}</div>
                 </div>
 
-                <div className="col-span-7 space-y-3">
+                {/* Описание отеля */}
+                <div className="md:col-span-7 w-full space-y-3">
                   <div className="flex items-center gap-2 text-xs font-mono text-[#E0C179]">
                     <span>{hotel.city} • {hotel.nights} ночи</span>
                     <span>•</span>
@@ -155,19 +159,19 @@ export const Hotels: React.FC = () => {
                   <h3 className="font-display text-2xl font-bold text-white">
                     {hotel.name}
                   </h3>
-                  <p className="text-xs text-stone-300 font-light leading-relaxed">
+                  <p className="text-xs sm:text-sm text-stone-300 font-light leading-relaxed">
                     {hotel.description}
                   </p>
-                  <div className="p-3 bg-black/40 rounded-sm border border-white/10 text-xs">
+                  <div className="p-3 bg-black/40 rounded-md border border-white/10 text-xs">
                     <span className="text-[#FFE066] font-bold block mb-1">Завтраки:</span>
-                    <span className="text-stone-300">{hotel.breakfast}</span>
+                    <span className="text-stone-300 leading-snug">{hotel.breakfast}</span>
                   </div>
                 </div>
+
               </div>
             </div>
           ))}
         </div>
-
       </div>
     </section>
   );

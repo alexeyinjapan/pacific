@@ -16,8 +16,11 @@ export const MomijiCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [enabled, setEnabled] = useState(true);
 
+  // Проверка режима экспорта (?export=1)
+  const isExport = typeof window !== 'undefined' && window.location.search.includes('export');
+
   useEffect(() => {
-    if (!enabled) return;
+    if (!enabled || isExport) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -43,7 +46,7 @@ export const MomijiCanvas: React.FC = () => {
       '#8B1515'  // deep scarlet
     ];
 
-    const leafCount = 18; // tasteful, subtle, non-intrusive
+    const leafCount = 18;
     const leaves: Leaf[] = Array.from({ length: leafCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height - height,
@@ -63,24 +66,16 @@ export const MomijiCanvas: React.FC = () => {
       ctx.fillStyle = leaf.color;
       ctx.globalAlpha = leaf.opacity;
 
-      // Stylized 5-lobed Japanese Momiji Maple leaf path
       ctx.beginPath();
       const s = leaf.size;
       ctx.moveTo(0, -s * 0.8);
-      // Top tip
       ctx.bezierCurveTo(s * 0.3, -s * 0.5, s * 0.7, -s * 0.7, s * 0.9, -s * 0.3);
-      // Right upper lobe
       ctx.bezierCurveTo(s * 0.6, -s * 0.1, s * 0.9, s * 0.2, s * 0.7, s * 0.5);
-      // Right lower lobe
       ctx.bezierCurveTo(s * 0.4, s * 0.4, s * 0.2, s * 0.8, 0, s * 0.9);
-      // Stem
       ctx.lineTo(0, s * 1.1);
       ctx.lineTo(-s * 0.05, s * 0.9);
-      // Left lower lobe
       ctx.bezierCurveTo(-s * 0.2, s * 0.8, -s * 0.4, s * 0.4, -s * 0.7, s * 0.5);
-      // Left upper lobe
       ctx.bezierCurveTo(-s * 0.9, s * 0.2, -s * 0.6, -s * 0.1, -s * 0.9, -s * 0.3);
-      // Top left
       ctx.bezierCurveTo(-s * 0.7, -s * 0.7, -s * 0.3, -s * 0.5, 0, -s * 0.8);
       ctx.closePath();
       ctx.fill();
@@ -119,7 +114,10 @@ export const MomijiCanvas: React.FC = () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [enabled]);
+  }, [enabled, isExport]);
+
+  // Если включен режим экспорта — полностью скрываем и канвас, и кнопку!
+  if (isExport) return null;
 
   return (
     <>
@@ -130,11 +128,10 @@ export const MomijiCanvas: React.FC = () => {
           aria-hidden="true"
         />
       )}
-      {/* Subtle control button in bottom corner */}
       <button
         onClick={() => setEnabled(!enabled)}
         title={enabled ? "Приостановить листопад момидзи" : "Включить листопад момидзи"}
-        className="fixed bottom-4 left-4 z-40 flex items-center gap-1.5 rounded-full border border-stone-300/80 bg-white/90 px-3 py-1.5 text-xs text-stone-600 shadow-sm backdrop-blur-md transition-all hover:bg-white hover:text-stone-900"
+        className="fixed bottom-4 left-4 z-40 flex items-center gap-1.5 rounded-full border border-stone-300/80 bg-white/90 px-3 py-1.5 text-xs text-stone-600 shadow-sm backdrop-blur-md transition-all hover:bg-white hover:text-stone-900 print:hidden"
       >
         <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: enabled ? '#B82626' : '#9CA3AF' }} />
         <span>{enabled ? "Момидзи: вкл" : "Момидзи: выкл"}</span>

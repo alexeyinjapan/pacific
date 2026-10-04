@@ -178,51 +178,56 @@ export const Itinerary: React.FC = () => {
           </div>
         </div>
 
-        {/* 2. РЕЖИМ ПЕЧАТИ В PDF: Выводит подряд ВСЕ 7 ДНЕЙ! */}
-        <div className={`${typeof window !== 'undefined' && window.location.search.includes('export') ? 'block' : 'hidden print:block'} space-y-12`}>
+       {/* 2. РЕЖИМ ПЕЧАТИ И ЭКСПОРТА: Адаптивный мобильный вид (Фото сверху на всю ширину, текст снизу) */}
+        <div className={`${typeof window !== 'undefined' && window.location.search.includes('export') ? 'block' : 'hidden print:block'} space-y-8`}>
           {TOUR_DAYS.map((day) => (
             <div
               key={day.day}
-              className="p-8 rounded-lg bg-stone-900 border border-stone-800 text-white break-inside-avoid"
+              className="p-5 sm:p-7 rounded-xl bg-stone-900 border border-stone-800 text-white break-inside-avoid"
               style={{ pageBreakInside: 'avoid' }}
             >
-              <div className="grid grid-cols-12 gap-8 items-start">
-                <div className="col-span-4">
+              {/* На телефоне grid-cols-1 (в столбик), на компьютере md:grid-cols-12 */}
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-5 sm:gap-8 items-start">
+                
+                {/* Фотография: на телефоне сверху на всю ширину! */}
+                <div className="md:col-span-5 w-full">
                   <img
                     src={day.image}
                     alt={day.title}
-                    className="w-full h-52 object-cover rounded-md border border-white/20 mb-4"
+                    className="w-full aspect-[16/10] sm:h-52 object-cover rounded-lg border border-white/20 mb-3"
                   />
-                  <div className="p-3 bg-black/40 rounded-sm border border-white/10 text-xs space-y-2">
+                  <div className="p-3 bg-black/40 rounded-md border border-white/10 text-xs space-y-1.5">
                     <div><b className="text-[#E0C179]">Питание:</b> {day.meals}</div>
                     <div><b className="text-[#E0C179]">Отель:</b> {day.hotel}</div>
                   </div>
                 </div>
 
-                <div className="col-span-8 space-y-3">
+                {/* Описание и расписание под фотографией */}
+                <div className="md:col-span-7 w-full space-y-3">
                   <div className="text-xs font-mono uppercase tracking-widest text-[#E0C179]">
                     День 0{day.day} • {day.city}
                   </div>
-                  <h3 className="font-display text-2xl font-bold text-white">
+                  <h3 className="font-display text-2xl sm:text-3xl font-bold text-white leading-tight">
                     {day.title}
                   </h3>
-                  <p className="text-xs text-stone-300 leading-relaxed font-light">
+                  <p className="text-xs sm:text-sm text-stone-300 leading-relaxed font-light">
                     {day.description}
                   </p>
                   
-                  {/* Поминутно */}
+                  {/* Поминутное расписание */}
                   <div className="pt-2">
-                    <div className="text-xs font-semibold text-[#E0C179] mb-2">Программа:</div>
-                    <div className="space-y-1 text-xs text-stone-300">
+                    <div className="text-xs font-semibold text-[#E0C179] mb-2">Программа дня:</div>
+                    <div className="space-y-1.5 text-xs text-stone-300">
                       {day.schedule.map((item, idx) => (
-                        <div key={idx} className="flex gap-3">
-                          <span className="font-mono text-[#FFE066] w-20 shrink-0">{item.time}</span>
-                          <span>{item.activity}</span>
+                        <div key={idx} className="flex gap-2.5">
+                          <span className="font-mono text-[#FFE066] w-20 shrink-0 font-semibold">{item.time}</span>
+                          <span className="leading-snug">{item.activity}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
+
               </div>
             </div>
           ))}
