@@ -23,8 +23,8 @@ export const Hotels: React.FC = () => {
           </p>
         </div>
 
-        {/* 1. ЭКРАННЫЙ ВИД: Переключатель отелей (Скрывается при печати) */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-10 print:hidden">
+        {/* 1. ЭКРАННЫЙ ВИД: Переключатель отелей (Скрывается при печати / экспорте) */}
+        <div className={`flex flex-col sm:flex-row gap-3 mb-10 ${typeof window !== 'undefined' && window.location.search.includes('export') ? 'hidden' : 'print:hidden'}`}>
           {TOUR_HOTELS.map((hotel) => (
             <button
               key={hotel.id}
@@ -52,8 +52,8 @@ export const Hotels: React.FC = () => {
           ))}
         </div>
 
-        {/* 1. ЭКРАННЫЙ ВИД: Показывает выбранный отель (Скрывается при печати) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch bg-white/5 border border-white/10 rounded-sm p-6 lg:p-10 backdrop-blur-xs print:hidden">
+        {/* 1. ЭКРАННЫЙ ВИД: Показывает выбранный отель (Скрывается при печати / экспорте) */}
+        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch bg-white/5 border border-white/10 rounded-sm p-6 lg:p-10 backdrop-blur-xs ${typeof window !== 'undefined' && window.location.search.includes('export') ? 'hidden' : 'print:hidden'}`}>
           <div className="lg:col-span-5 flex flex-col justify-between">
             <div className="relative rounded-sm overflow-hidden aspect-4/3 border border-white/15 shadow-xl mb-6">
               <img
@@ -128,7 +128,7 @@ export const Hotels: React.FC = () => {
         </div>
 
         {/* 2. РЕЖИМ ПЕЧАТИ В PDF: Выводит подряд ОБА ОТЕЛЯ! */}
-        <div className="hidden print:block space-y-12">
+<div className={`${typeof window !== 'undefined' && window.location.search.includes('export') ? 'block' : 'hidden print:block'} space-y-8`}>
           {TOUR_HOTELS.map((hotel) => (
             <div
               key={hotel.id}

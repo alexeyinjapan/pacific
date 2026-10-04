@@ -29,8 +29,8 @@ export const Itinerary: React.FC = () => {
             </p>
           </div>
 
-          {/* Day Navigation Controls (Скрываются при печати) */}
-          <div className="flex items-center gap-2 self-start md:self-auto print:hidden">
+          {/* Day Navigation Controls (Скрываются при печати / экспорте) */}
+          <div className={`flex items-center gap-2 self-start md:self-auto ${typeof window !== 'undefined' && window.location.search.includes('export') ? 'hidden' : 'print:hidden'}`}>
             <button
               onClick={() => setActiveDayIndex((prev) => (prev > 0 ? prev - 1 : TOUR_DAYS.length - 1))}
               className="cursor-pointer p-3 rounded-sm border border-white/20 bg-white/5 text-stone-200 hover:bg-white/10 hover:text-white transition-colors"
@@ -51,8 +51,8 @@ export const Itinerary: React.FC = () => {
           </div>
         </div>
 
-        {/* Days Tab Switcher (Скрывается при печати) */}
-        <div className="flex gap-2 overflow-x-auto pb-4 mb-10 scrollbar-none border-b border-white/10 print:hidden">
+        {/* Days Tab Switcher (Скрывается при печати / экспорте) */}
+        <div className={`flex gap-2 overflow-x-auto pb-4 mb-10 scrollbar-none border-b border-white/10 ${typeof window !== 'undefined' && window.location.search.includes('export') ? 'hidden' : 'print:hidden'}`}>
           {TOUR_DAYS.map((d, index) => {
             const isActive = index === activeDayIndex;
             return (
@@ -78,9 +78,10 @@ export const Itinerary: React.FC = () => {
             );
           })}
         </div>
+        
 
         {/* 1. ЭКРАННЫЙ ВИД: Показывает выбранный день (Скрывается при печати) */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start print:hidden">
+        <div className={`grid grid-cols-1 lg:grid-cols-12 gap-10 items-start ${typeof window !== 'undefined' && window.location.search.includes('export') ? 'hidden' : 'print:hidden'}`}>
           {/* Левая колонка */}
           <div className="lg:col-span-5 flex flex-col gap-6">
             <div className="relative rounded-sm overflow-hidden border border-white/15 bg-stone-900 aspect-4/3 shadow-2xl">
@@ -178,7 +179,7 @@ export const Itinerary: React.FC = () => {
         </div>
 
         {/* 2. РЕЖИМ ПЕЧАТИ В PDF: Выводит подряд ВСЕ 7 ДНЕЙ! */}
-        <div className="hidden print:block space-y-12">
+        <div className={`${typeof window !== 'undefined' && window.location.search.includes('export') ? 'block' : 'hidden print:block'} space-y-12`}>
           {TOUR_DAYS.map((day) => (
             <div
               key={day.day}

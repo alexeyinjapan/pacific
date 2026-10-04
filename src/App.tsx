@@ -39,17 +39,21 @@ export default function App() {
           <RouteMap />
 
           {/* Section 4: Где вы будете жить (Отели Токио и Киото) */}
-          <Hotels />
+ <Hotels />
 
           {/* Section 5: Прозрачные условия (Включено / Не включено) */}
           <Inclusions onOpenCalculator={() => setIsBookingModalOpen(true)} />
 
           {/* Section 6: Финальный CTA и Форма бронирования / Калькулятор */}
-          <TourCalculator />
+          {!(typeof window !== 'undefined' && window.location.search.includes('export')) && (
+            <TourCalculator />
+          )}
         </main>
 
         {/* Section 7: Футер и контакты туроператора Pacific Partners Tokyo */}
-        <Footer />
+        {!(typeof window !== 'undefined' && window.location.search.includes('export')) && (
+          <Footer />
+        )}
 
         {/* Interactive Booking & Calculation Dialog */}
         <BookingModal
