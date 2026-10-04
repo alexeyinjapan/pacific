@@ -6,6 +6,9 @@ export const RouteMap: React.FC = () => {
   const [activeStopId, setActiveStopId] = useState<string>('shinkansen');
   const activeStop = ROUTE_STOPS.find((s) => s.id === activeStopId) || ROUTE_STOPS[0];
 
+  // Проверка режима экспорта в ссылке (?export=1)
+  const isExport = typeof window !== 'undefined' && window.location.search.includes('export');
+
   const stopPerks: Record<string, string> = {
     tokyo: 'Индивидуальный трансфер из аэропорта, отель в Гинзе, экскурсия по Токио с русскоязычным гидом.',
     disney: 'Трансфер в парк, входной безлимитный 1-Day Passport и билеты на поезд обратно.',
@@ -39,13 +42,14 @@ export const RouteMap: React.FC = () => {
           <div className="lg:col-span-7 w-full min-w-0">
             <div className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-xl overflow-hidden border border-stone-200 shadow-md bg-sky-100 select-none">
               
+              {/* Фотография 3D-карты */}
               <img
                 src="/images/japan-map-3d.jpg"
                 alt="3D Карта тура по Японии"
                 className="w-full h-full object-cover block pointer-events-none"
               />
 
-              <div className="absolute top-3 left-3 text-stone-800 text-[10px] sm:text-xs font-mono tracking-wider uppercase flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-xs z-20 pointer-events-none print:hidden">
+              <div className={`absolute top-3 left-3 text-stone-800 text-[10px] sm:text-xs font-mono tracking-wider uppercase flex items-center gap-1.5 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full shadow-xs z-20 pointer-events-none ${isExport ? 'hidden' : 'print:hidden'}`}>
                 <Navigation className="h-3 w-3 text-[#B82626] animate-spin" style={{ animationDuration: '24s' }} />
                 <span>Хонсю • Линия Синкансэн Токайдо</span>
               </div>
@@ -149,8 +153,9 @@ export const RouteMap: React.FC = () => {
 
           {/* Правая колонка: Детали пункта */}
           <div className="lg:col-span-5 w-full min-w-0 flex flex-col justify-between space-y-5">
-            {/* 1. ЭКРАННЫЙ ВИД (Показывает выбранную точку) */}
-            <div className="print:hidden">
+            
+            {/* 1. ЭКРАННЫЙ ВИД (Скрывается при печати и при ?export=1) */}
+            <div className={isExport ? 'hidden' : 'print:hidden'}>
               <div className="flex items-center justify-between pb-2.5 border-b border-stone-200">
                 <span className="text-xs uppercase tracking-widest text-[#B82626] font-semibold flex items-center gap-1.5">
                   <MapPin className="h-3.5 w-3.5" />
@@ -201,19 +206,19 @@ export const RouteMap: React.FC = () => {
               </div>
             </div>
 
-            {/* 2. ПЕЧАТНЫЙ ВИД ДЛЯ PDF: Показывает подряд ВСЕ 6 ЛОКАЦИЙ! */}
-            <div className="hidden print:block space-y-3">
+            {/* 2. ВИД ДЛЯ ЭКСПОРТА И PDF: СРАЗУ ВСЕ 6 ЛОКАЦИЙ! */}
+            <div className={isExport ? 'block space-y-3' : 'hidden print:block space-y-3'}>
               <div className="text-xs font-bold uppercase tracking-wider text-[#B82626] pb-1 border-b border-stone-200">
                 Все ключевые локации маршрута:
               </div>
-              <div className="grid grid-cols-2 gap-2.5 text-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
                 {ROUTE_STOPS.map((stop) => (
-                  <div key={stop.id} className="p-2.5 rounded bg-stone-50 border border-stone-200">
+                  <div key={stop.id} className="p-3 rounded-lg bg-stone-50 border border-stone-200">
                     <div className="font-bold text-stone-900 flex items-center justify-between">
                       <span>{stop.name}</span>
-                      <span className="text-[10px] text-[#B82626]">{stop.days}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#B82626]/10 text-[#B82626] font-semibold">{stop.days}</span>
                     </div>
-                    <div className="text-[11px] text-stone-600 mt-1 leading-snug">
+                    <div className="text-xs text-stone-600 mt-1.5 leading-relaxed font-light">
                       {stopPerks[stop.id]}
                     </div>
                   </div>
