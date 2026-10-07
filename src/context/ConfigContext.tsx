@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export const DEFAULT_CONFIG = {
-  // 1. Компания и контакты (ЕДИНОЕ НАЗВАНИЕ)
   company_name: "Pacific Partners Tokyo Co., Ltd.",
   header_logo_text: "Pacific Partners Tokyo",
   contact_phone: "+81 (0) 50-6871-2292",
@@ -10,18 +9,22 @@ export const DEFAULT_CONFIG = {
   whatsapp_link: "https://api.whatsapp.com/send/?phone=819099661555",
   telegram_link: "https://t.me/olga_japan",
 
-  // 2. Лиды (секретный токен берется из Google Таблицы)
+  // Лиды
   telegram_bot_token: "",
   telegram_chat_id: "5435183297",
   web3forms_key: "6583fb27-f160-4a7d-bc88-f886547bbe9c",
 
-  // 3. Валюты и курсы
+  // Аналитика (ПО УМОЛЧАНИЮ ПУСТО — НЕ СТАВИТСЯ)
+  yandex_metrika_id: "",
+  google_analytics_id: "",
+
+  // Валюты и курсы
   currency_primary_symbol: "$",
   currency_secondary_symbol: "¥",
   rate_to_primary: 1,
   rate_to_secondary: 155,
 
-  // 4. Сетка цен (12 точных цен)
+  // Цены туров
   price_spring_standard: 2350,
   price_spring_superior: 2690,
   price_spring_single: 2980,
@@ -35,7 +38,7 @@ export const DEFAULT_CONFIG = {
   price_winter_superior: 2170,
   price_winter_single: 2420,
 
-  // 5. Допы
+  // Допы
   addon_tea_name: "Традиционная чайная церемония в Киото",
   addon_tea_price: 65,
   addon_universal_name: "Билет в Universal Studios Japan (Осака)",
@@ -43,7 +46,7 @@ export const DEFAULT_CONFIG = {
   addon_kimono_name: "Фотосессия в шёлковом кимоно в Киото",
   addon_kimono_price: 140,
 
-  // 6. Сезоны
+  // Сезоны
   season_spring_title: "Весна",
   season_spring_sub: "Сакура",
   season_summer_title: "Лето",
@@ -53,13 +56,50 @@ export const DEFAULT_CONFIG = {
   season_winter_title: "Зима",
   season_winter_sub: "Фуджи & онсэн",
 
-  // 7. Номера
+  // Номера
   room_standard_name: "Standard Twin/Double",
   room_superior_name: "Superior Room",
   room_single_name: "Single (1 человек)",
 };
 
 const MASTER_SHEET_ID = "10MGliwSNVyvg_rB6exAle4I8x9B0j5K9qq5dJPpI_3k";
+
+// Функции динамического внедрения счетчиков только при наличии ID
+const injectAnalytics = (ymId?: string | number, gaId?: string) => {
+  if (typeof window === 'undefined' || typeof document === 'undefined') return;
+
+  // 1. Яндекс Метрика (только если указан ID)
+  if (ymId && String(ymId).trim() !== '' && !document.getElementById('ym-dynamic-script')) {
+    const ymScript = document.createElement('script');
+    ymScript.id = 'ym-dynamic-script';
+    ymScript.type = 'text/javascript';
+    ymScript.innerHTML = `
+      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+      m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+      (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+      ym(${ymId}, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true });
+    `;
+    document.head.appendChild(ymScript);
+  }
+
+  // 2. Google Analytics 4 (только если указан ID)
+  if (gaId && String(gaId).trim() !== '' && !document.getElementById('ga-dynamic-script')) {
+    const gaTag = document.createElement('script');
+    gaTag.id = 'ga-dynamic-script';
+    gaTag.async = true;
+    gaTag.src = `https://www.googletagmanager.com/gtag/js?id=${gaId}`;
+    document.head.appendChild(gaTag);
+
+    const gaInit = document.createElement('script');
+    gaInit.innerHTML = `
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '${gaId}');
+    `;
+    document.head.appendChild(gaInit);
+  }
+};
 
 const ConfigContext = createContext(DEFAULT_CONFIG);
 
@@ -101,11 +141,14 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
           });
 
-          // АВТОМАТИЧЕСКИ МЕНЯЕМ ЗАГОЛОВОК ВКЛАДКИ БРАУЗЕРА ПОД АГЕНТА:
+          // Обновляем заголовок вкладки под агента
           const activeCompany = loaded.company_name || loaded.header_logo_text || DEFAULT_CONFIG.company_name;
           if (typeof document !== 'undefined') {
             document.title = `Япония: между традицией и будущим | ${activeCompany}`;
           }
+
+          // ДИНАМИЧЕСКИ ВКЛЮЧАЕМ АНАЛИТИКУ ТОЛЬКО ЕСЛИ ОНА ЕСТЬ В ТАБЛИЦЕ
+          injectAnalytics(loaded.yandex_metrika_id, loaded.google_analytics_id);
 
           setConfig(prev => ({ ...prev, ...loaded }));
         })
