@@ -14,9 +14,10 @@ export const DEFAULT_CONFIG = {
   telegram_chat_id: "5435183297",
   web3forms_key: "6583fb27-f160-4a7d-bc88-f886547bbe9c",
 
-  // Аналитика (ПО УМОЛЧАНИЮ ПУСТО — НЕ СТАВИТСЯ)
+  // Аналитика и Вебмастер (ПО УМОЛЧАНИЮ ПУСТО)
   yandex_metrika_id: "",
   google_analytics_id: "",
+  yandex_verification_code: "",
 
   // Валюты и курсы
   currency_primary_symbol: "$",
@@ -64,11 +65,22 @@ export const DEFAULT_CONFIG = {
 
 const MASTER_SHEET_ID = "10MGliwSNVyvg_rB6exAle4I8x9B0j5K9qq5dJPpI_3k";
 
-// Функции динамического внедрения счетчиков только при наличии ID
-const injectAnalytics = (ymId?: string | number, gaId?: string) => {
+// Функции динамического внедрения счетчиков и мета-тегов
+const injectAnalyticsAndVerification = (ymId?: string | number, gaId?: string, yandexVerify?: string) => {
   if (typeof window === 'undefined' || typeof document === 'undefined') return;
 
-  // 1. Яндекс Метрика (только если указан ID)
+  // 1. Мета-тег Яндекс Вебмастера (только если указан код)
+  if (yandexVerify && String(yandexVerify).trim() !== '') {
+    let meta = document.querySelector('meta[name="yandex-verification"]');
+    if (!meta) {
+      meta = document.createElement('meta');
+      meta.setAttribute('name', 'yandex-verification');
+      document.head.appendChild(meta);
+    }
+    meta.setAttribute('content', String(yandexVerify).trim());
+  }
+
+  // 2. Яндекс Метрика (только если указан ID)
   if (ymId && String(ymId).trim() !== '' && !document.getElementById('ym-dynamic-script')) {
     const ymScript = document.createElement('script');
     ymScript.id = 'ym-dynamic-script';
@@ -82,7 +94,7 @@ const injectAnalytics = (ymId?: string | number, gaId?: string) => {
     document.head.appendChild(ymScript);
   }
 
-  // 2. Google Analytics 4 (только если указан ID)
+  // 3. Google Analytics 4 (только если указан ID)
   if (gaId && String(gaId).trim() !== '' && !document.getElementById('ga-dynamic-script')) {
     const gaTag = document.createElement('script');
     gaTag.id = 'ga-dynamic-script';
@@ -141,14 +153,18 @@ export const ConfigProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             }
           });
 
-          // Обновляем заголовок вкладки под агента
+          // Заголовок вкладки
           const activeCompany = loaded.company_name || loaded.header_logo_text || DEFAULT_CONFIG.company_name;
           if (typeof document !== 'undefined') {
             document.title = `Япония: между традицией и будущим | ${activeCompany}`;
           }
 
-          // ДИНАМИЧЕСКИ ВКЛЮЧАЕМ АНАЛИТИКУ ТОЛЬКО ЕСЛИ ОНА ЕСТЬ В ТАБЛИЦЕ
-          injectAnalytics(loaded.yandex_metrika_id, loaded.google_analytics_id);
+          // Подключаем Метрику, Google Analytics и Мета-тег Яндекс Вебмастера
+          injectAnalyticsAndVerification(
+            loaded.yandex_metrika_id,
+            loaded.google_analytics_id,
+            loaded.yandex_verification_code
+          );
 
           setConfig(prev => ({ ...prev, ...loaded }));
         })
